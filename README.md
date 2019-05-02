@@ -166,7 +166,14 @@ Quality_Control/
   
 The summary of the reads will be in the `*.out` file, which will give how many reads is kept and how many have been discarded in each run.  
   
-
+| Sample | Input records | Paired records kept | single records kept | paired records discarded | single records discarded | Kept (%) |   
+| --- | --- | --- | --- | --- | --- | --- |   
+| U13 | 36516384 | 36516384 | 4048114 | 4004868 | 4048114 | 75.1 |   
+| U32 | 46566276 | 35981128 | 3388161 | 3808826 | 3388161 | 77.3 |   
+| K32 | 41656220 | 30657748 | 3646736 | 3705000 | 3646736 | 73.6 |    
+   
+   
+d
 
      
 
