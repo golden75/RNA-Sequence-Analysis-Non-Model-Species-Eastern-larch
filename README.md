@@ -336,4 +336,66 @@ The _centroids.fasta_ will contain the unique genes from the three asseblies.
    
      
      
+## 5. Identifying the Coding Regions   
+   
+### Identifying coding regions using TransDecoder   
+
+Now that we have our reads assembled and clustered together into the single centroids file, we can use [TransDecoder](https://github.com/TransDecoder/TransDecoder/wiki) to determine optimal open reading frames from the assembly (ORFs). Assembled RNA-Seq transcripts may have 5′ or 3′ UTR sequence attached and this can make it difficult to determine the CDS in non-model species. We will not be going into how TransDecoder works. However, should you click the link you'll be happy to see that they have a very simple one paragraph explanation telling you exactly that.
+Our first step is to determine all [open-reading-frames](https://en.wikipedia.org/wiki/Open_reading_frame). We can do this using the 'TransDecoder.LongOrfs' command. This command is quite simple, with one option, '-t', which is simply our centroid fasta! The command is therefore:   
+   
+```
+module load TransDecoder/5.3.0
+
+TransDecoder.LongOrfs -t ../clustering/centroids.fasta
+```
+
+The command useage would be:
+```
+Transdecoder.LongOrfs [options]
+
+Required:
+  -t <string>           transcripts.fasta
+```
+
+
+By default it will identify ORFs that are at least 100 amino acids long. (you can change this by using -m parameter). It will produce a folder called centroids.fasta.transdecoder_dir   
+
+```
+coding_regions
+├── centroids.fasta.transdecoder_dir
+│   ├── base_freqs.dat
+│   ├── longest_orfs.cds
+│   ├── longest_orfs.gff3
+│   └── longest_orfs.pep
+```
+
+
+Next step is to, identify ORFs with homology to known proteins via blast or pfam searches. This will maximize the sensitivity for capturing the ORFs that have functional significance. We will be using the Pfram databases. Pfam stands for "Protein families", and is simply an absolutely massive database with mountains of searchable information on, well, you guessed it, protein families. We can scan the Pfam databases using the software hmmer, a database homologous-sequence fetcher. The Pfam databases are much too large to install on a local computer. However, you may find them on Xanadu in the directory '/isg/shared/databases/Pfam/Pfam-B.hmm', which is an hmmer file (must be an hmmer file for hmmer to scan!).  
+   
+```
+hmmscan --cpu 16 \
+        --domtblout pfam.domtblout \
+        /isg/shared/databases/Pfam/Pfam-A.hmm \
+        centroids.fasta.transdecoder_dir/longest_orfs.pep
+```
+
+Usage of the command:
+```
+Usage: hmmscan [-options] <hmmdb> <seqfile>
+
+Options controlling output:
+--domtblout <f>  : save parseable table of per-domain hits to file <f>
+
+Other expert options:
+--cpu <n>     : number of parallel CPU workers to use for multithreads  [2]
+```
+
+
+Once the run is completed it will create the following files in the directory.
+
+```
+coding_regions
+├── pfam.domtblout
+```
+
  
