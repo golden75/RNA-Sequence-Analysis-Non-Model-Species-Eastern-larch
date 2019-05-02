@@ -6,6 +6,10 @@ This repository is a usable, publicly available tutorial for analyzing different
   
 Contents  
 1. [Introduction](#1-introduction)  
+2. [Quality Control](#2-quality-control)   
+3. [Assembling the Transcriptome](#3-assembling-the-transcriptome)  
+4. [Determining and removing repeat modules](#4-determining-and-removing-repeat-modules)   
+ 
  
 
 ## 1. Introduction  
