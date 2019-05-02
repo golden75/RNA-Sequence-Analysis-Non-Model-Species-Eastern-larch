@@ -173,8 +173,163 @@ The summary of the reads will be in the `*.out` file, which will give how many r
 | K32 | 41656220 | 30657748 | 3646736 | 3705000 | 3646736 | 73.6 |    
    
    
-d
+       
+## 3. Assembling the Transcriptome   
+    
+### De novo Assembling the Transcriptome using Trinity   
+   
+Now that we've performed quality control we are ready to assemble our transcriptome using the RNA-Seq reads. We will be using the software [Trinity](https://github.com/trinityrnaseq/trinityrnaseq/wiki). Nearly all transcriptome assembly software operates under the same premise. Consider the following:
 
+Suppose we have the following reads:
+```
+A C G A C G T T T G A G A
+T T G A G A T T A C C T A G
+```
+
+We notice that the end of each read is the beginning of the next read, so we assemble them as one sequence by matching the overlaps:
+```
+A C G A C G T T T G A G A
+              T T G A G A T T A C C T A G
+```
+
+Which gives us:
+```
+A C G A C G T [T T G A G A] T T A C C T A G
+```
+
+    
+### De novo Assembling the Transcriptome using Trinity
+
+In De novo assembly section, we will be woking in the `assembly` directory. In here we will be assembling the trimmed illumina reads seperatly using the trinity transcriptome assembler. Assembly requires a great deal of memory (RAM) and can take few days if the read set is large. Following is the trinity command that we use to assemble each transcriptome seperatly.    
+   
+```bash
+module load trinity/2.6.6
+
+Trinity --seqType fq \
+        --left ../Quality_Control/trim_U13_R1.fastq \
+        --right ../Quality_Control/trim_U13_R2.fastq \
+        --min_contig_length 300 \
+        --CPU 36 \
+        --max_memory 100G \
+        --output trinity_U13 \
+        --full_cleanup 
+
+Trinity --seqType fq \
+        --left ../Quality_Control/trim_U32_R1.fastq \
+        --right ../Quality_Control/trim_U32_R2.fastq \
+        --min_contig_length 300 \
+        --CPU 36 \
+        --max_memory 100G \
+        --output trinity_U32 \
+        --full_cleanup
+
+Trinity --seqType fq \
+        --left ../Quality_Control/trim_K32_R1.fastq \
+        --right ../Quality_Control/trim_K32_R2.fastq \
+        --min_contig_length 300 \
+        --CPU 36 \
+        --max_memory 100G \
+        --output trinity_K32 \
+        --full_cleanup
+```  
+    
+    
+So the useage information for Trinity program we use:
+```
+Usage:  Trinity [options]
+
+Options (Required):
+--seqType <string>       : type of reads: ('fa' or 'fq')
+--max_memory <string>    : max memory to use by Trinity
+
+if unpaired reads
+--single <string>        : unpaired/single reads, one or more file names can be included
+
+if paired reads
+--left  <string>         :left reads, one or more file names (separated by commas, no spaces)
+--right <string>         :right reads, one or more file names (separated by commas, no spaces) 
+
+Options (optional)
+--CPU <int>              : number of CPUs to use, default: 2
+--min_contig_length <int>: minimum assembled contig length to report (def=200)
+--output <string>        : directory for output
+--full_cleanup           : only retain the Trinity fasta file, rename as ${output_dir}.Trinity.fasta
+```  
+   
      
+The full slurm script is called [Trinity.sh](/Assembly/Trinity.sh), and can be found in the assembly directory.   
 
+Trinity combines three independent software modules: Inchworm, Chrysalis, and Butterfly, applied sequentially to process large volumes of RNA-seq reads. Trinity partitions the sequence data into many individual de Bruijn graphs, each representing the transcriptional complexity at a given gene or locus, and then processes each graph independently to extract full-length splicing isoforms and to tease apart transcripts derived from paralogous genes. Briefly, the process works like so:   
+    
+_Inchworm_ assembles the RNA-seq data into the unique sequences of transcripts, often generating full-length transcripts for a dominant isoform, but then reports just the unique portions of alternatively spliced transcripts.   
+   
+_Chrysalis_ clusters the Inchworm contigs into clusters and constructs complete de Bruijn graphs for each cluster. Each cluster represents the full transcriptonal complexity for a given gene (or sets of genes that share sequences in common). Chrysalis then partitions the full read set among these disjoint graphs.   
+    
+_Butterfly_ then processes the individual graphs in parallel, tracing the paths that reads and pairs of reads take within the graph, ultimately reporting full-length transcripts for alternatively spliced isoforms, and teasing apart transcripts that corresponds to paralogous genes.   
+   
+During the **Trinity** run there will be lots of files will be grenerated. These checkpoint files will help us to restart from that specific point if for some reason the program stops for some other problems. Once the program ends sucessfully all these checkpoint files will be removed since we have requested a full cleanup using the `--full_cleanup` command. Clearing the files is very important as it will help us to remove all the unwanted files and also to keep the storage capacity and the number of files to a minimum. So at the end of a successful run we will end up with the following files:   
+   
+```
+Assembly
+├── trinity_K32.Trinity.fasta
+├── trinity_K32.Trinity.fasta.gene_trans_map
+├── trinity_U13.Trinity.fasta
+├── trinity_U13.Trinity.fasta.gene_trans_map
+├── trinity_U32.Trinity.fasta
+└── trinity_U32.Trinity.fasta.gene_trans_map
+```
+   
+So we will have three assembly files, one for each condition or time step.  
+  
+   
+     
+## 4. Determining and removing repeat modules
+
+### Clustering using vsearch
+Because we used RNA reads to sequence our transcriptome, chances are that there are multiples of the same reads varying slightly which create multiples of the same assembled sequence. Under this assumption, we may also assume that most of the modules in our assembled transcriptome are actually repeats, the results of the assembly of slightly different reads from the same gene. We want to remove the repeats of these modules to shorten the length of our transcriptome and make for more efficient work in the future. We can do this by partitioning and clustering the transcriptome, then taking only one module from each of the clusters. There is a very convenient software which performs all of this for us in the exact way just described: [vsearch](https://github.com/torognes/vsearch).
+
+To obtain a set of unique genes from both runs, we will cluster the two resulting assemblies together. First, the two assembies will be combined into one file using the Unix command cat, which refers to concatanate.   
+
+```bash
+cat ../Assembly/trinity_U13.Trinity.fasta \
+        ../Assembly/trinity_U32.Trinity.fasta \
+        ../Assembly/trinity_K32.Trinity.fasta >> combine.fasta  
+```  
+   
+Once the files are combined, we will use vsearch to find redundancy between the assembled transcripts and create a single output known as a centroids file. The threshold for clustering in this example is set to 80% identity.  
+```bash
+module load vsearch/2.4.3
+
+vsearch --threads 32 --log LOGFile \
+        --cluster_fast combine.fasta \
+        --id 0.80 \
+        --centroids centroids.fasta \
+        --uc clusters.uc
+
+```   
+
+Command options in the vsearch program that we used:
+```
+Usage: vsearch [OPTIONS]
+--threads INT               number of threads to use, zero for all cores (0)
+--log FILENAME              write messages, timing and memory info to file
+--cluster_fast FILENAME     cluster sequences after sorting by length
+--id REAL                   reject if identity lower, accepted values: 0-1.0
+--centroids FILENAME        output centroid sequences to FASTA file
+--uc FILENAME               specify filename for UCLUST-like output
+```   
+  
+The full script is called [vsearch.sh](/Clustering/vsearch.sh), which can be found in the **Clustering** folder. At the end of the run it will produce the following files:   
+```
+Clustering/
+├── centroids.fasta
+├── clusters.uc
+├── combine.fasta
+└── LOGFile
+```     
+
+The _centroids.fasta_ will contain the unique genes from the three asseblies.   
+   
+     
+     
  
