@@ -43,6 +43,15 @@ Trinity --seqType fq \
 	--output trinity_K32 \
 	--full_cleanup 
 
+Trinity --seqType fq \
+        --left ../Quality_Control/trim_K22_R1.fastq \
+        --right ../Quality_Control/trim_K22_R2.fastq \
+        --min_contig_length 300 \
+        --CPU 36 \
+        --max_memory 100G \
+        --output trinity_K22 \
+        --full_cleanup
+
 date 
 
 
