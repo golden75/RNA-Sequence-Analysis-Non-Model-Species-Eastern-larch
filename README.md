@@ -23,7 +23,7 @@ When an organism is called "model" there is an underlying assumption that very g
 The data consists of 4 libraries under three different time points (roughly one month apart):  
 *  U32 : UConn Tree 3, at time point 2  
 *  U13 : UConn Tree 1, at time point 3  
-*  K22 : Killingworth Tree 2, at time point 2   
+*  K32 : Killingworth Tree 2, at time point 2   
 *  K23 : Killingworth Tree 2, at time point 3
 
   
@@ -61,9 +61,9 @@ Before beginning, we need to understand a few aspects of the Xanadu server. When
 Raw_Reads folder will look like:  
 ```
 Raw_Reads/
-├── K22
-│   ├── K22_R1.fastq
-│   └── K22_R2.fastq
+├── K23
+│   ├── K23_R1.fastq
+│   └── K23_R2.fastq
 ├── K32
 │   ├── K32_R1.fastq
 │   └── K32_R2.fastq
@@ -127,12 +127,12 @@ sickle pe -f ../Raw_Reads/K32/K32_R1.fastq \
         -s singles_K32.fastq \
         -q 30 -l 45
 
-sickle pe -f ../Raw_Reads/K22/K22_R1.fastq \
-        -r ../Raw_Reads/K22/K22_R2.fastq \
+sickle pe -f ../Raw_Reads/K23/K23_R1.fastq \
+        -r ../Raw_Reads/K23/K23_R2.fastq \
         -t sanger \
-        -o trim_K22_R1.fastq \
-        -p trim_K22_R2.fastq \
-        -s singles_K22.fastq \
+        -o trim_K23_R1.fastq \
+        -p trim_K23_R2.fastq \
+        -s singles_K23.fastq \
         -q 30 -l 45
 ```
    
@@ -175,9 +175,9 @@ Quality_Control/
 ├── trim_U32_R1.fastq
 ├── trim_U32_R2.fastq
 ├── singles_U32.fastq
-├── trim_K22_R1.fastq
-├── trim_K22_R2.fastq
-├── singles_K22.fastq
+├── trim_K23_R1.fastq
+├── trim_K23_R2.fastq
+├── singles_K23.fastq
 ├── trim_K32_R1.fastq
 ├── trim_K32_R2.fastq
 └── singles_K32.fastq
@@ -190,7 +190,7 @@ The summary of the reads will be in the `*.out` file, which will give how many r
 | U13 | 36516384 | 36516384 | 4048114 | 4004868 | 4048114 | 75.1 |   
 | U32 | 46566276 | 35981128 | 3388161 | 3808826 | 3388161 | 77.3 |   
 | K32 | 41656220 | 30657748 | 3646736 | 3705000 | 3646736 | 73.6 |     
-| K22 | 42555040 | 31564878 | 3510597 | 3968968 | 3510597 | 74.2 |   
+| K23 | 45017196 | 33692758 | 3669578 | 3985282 | 3669578 | 74.2 |   
    
    
    
@@ -254,12 +254,12 @@ Trinity --seqType fq \
         --full_cleanup
 
 Trinity --seqType fq \
-        --left ../Quality_Control/trim_K22_R1.fastq \
-        --right ../Quality_Control/trim_K22_R2.fastq \
+        --left ../Quality_Control/trim_K23_R1.fastq \
+        --right ../Quality_Control/trim_K23_R2.fastq \
         --min_contig_length 300 \
         --CPU 36 \
         --max_memory 100G \
-        --output trinity_K22 \
+        --output trinity_K23 \
         --full_cleanup
 ```  
     
