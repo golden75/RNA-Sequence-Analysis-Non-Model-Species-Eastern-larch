@@ -44,12 +44,12 @@ Trinity --seqType fq \
 	--full_cleanup 
 
 Trinity --seqType fq \
-        --left ../Quality_Control/trim_L23_R1.fastq \
-        --right ../Quality_Control/trim_L23_R2.fastq \
+        --left ../Quality_Control/trim_K23_R1.fastq \
+        --right ../Quality_Control/trim_K23_R2.fastq \
         --min_contig_length 300 \
         --CPU 36 \
         --max_memory 100G \
-        --output trinity_L23 \
+        --output trinity_K23 \
         --full_cleanup
 
 date 
