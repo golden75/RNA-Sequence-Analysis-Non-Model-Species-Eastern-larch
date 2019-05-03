@@ -40,5 +40,13 @@ sickle pe -f ../Raw_Reads/K32/K32_R1.fastq \
 	-s singles_K32.fastq \
 	-q 30 -l 45 
 
+sickle pe -f ../Raw_Reads/K22/K22_R1.fastq \
+        -r ../Raw_Reads/K22/K22_R2.fastq \
+        -t sanger \
+        -o trim_K22_R1.fastq \
+        -p trim_K22_R2.fastq \
+        -s singles_K22.fastq \
+        -q 30 -l 45
+
 date
 
