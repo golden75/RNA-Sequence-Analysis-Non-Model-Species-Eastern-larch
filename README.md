@@ -8,7 +8,8 @@ Contents
 1. [Introduction](#1-introduction)  
 2. [Quality Control](#2-quality-control)   
 3. [Assembling the Transcriptome](#3-assembling-the-transcriptome)  
-4. [Determining and removing repeat modules](#4-determining-and-removing-repeat-modules)   
+4. [Identifying the Coding Regions](#4-identifying-the-coding-regions)  
+ 
  
  
 
@@ -313,56 +314,8 @@ So we will have three assembly files, one for each condition or time step.
   
    
      
-## 4. Determining and removing repeat modules
-
-### Clustering using vsearch
-Because we used RNA reads to sequence our transcriptome, chances are that there are multiples of the same reads varying slightly which create multiples of the same assembled sequence. Under this assumption, we may also assume that most of the modules in our assembled transcriptome are actually repeats, the results of the assembly of slightly different reads from the same gene. We want to remove the repeats of these modules to shorten the length of our transcriptome and make for more efficient work in the future. We can do this by partitioning and clustering the transcriptome, then taking only one module from each of the clusters. There is a very convenient software which performs all of this for us in the exact way just described: [vsearch](https://github.com/torognes/vsearch).
-
-To obtain a set of unique genes from both runs, we will cluster the two resulting assemblies together. First, the two assembies will be combined into one file using the Unix command cat, which refers to concatanate.   
-
-```bash
-cat ../Assembly/trinity_U13.Trinity.fasta \
-        ../Assembly/trinity_U32.Trinity.fasta \
-        ../Assembly/trinity_K32.Trinity.fasta >> combine.fasta  
-```  
-   
-Once the files are combined, we will use vsearch to find redundancy between the assembled transcripts and create a single output known as a centroids file. The threshold for clustering in this example is set to 80% identity.  
-```bash
-module load vsearch/2.4.3
-
-vsearch --threads 32 --log LOGFile \
-        --cluster_fast combine.fasta \
-        --id 0.80 \
-        --centroids centroids.fasta \
-        --uc clusters.uc
-
-```   
-
-Command options in the vsearch program that we used:
-```
-Usage: vsearch [OPTIONS]
---threads INT               number of threads to use, zero for all cores (0)
---log FILENAME              write messages, timing and memory info to file
---cluster_fast FILENAME     cluster sequences after sorting by length
---id REAL                   reject if identity lower, accepted values: 0-1.0
---centroids FILENAME        output centroid sequences to FASTA file
---uc FILENAME               specify filename for UCLUST-like output
-```   
-  
-The full script is called [vsearch.sh](/Clustering/vsearch.sh), which can be found in the **Clustering** folder. At the end of the run it will produce the following files:   
-```
-Clustering/
-├── centroids.fasta
-├── clusters.uc
-├── combine.fasta
-└── LOGFile
-```     
-
-The _centroids.fasta_ will contain the unique genes from the three asseblies.   
-   
      
-     
-## 5. Identifying the Coding Regions   
+## 4. Identifying the Coding Regions   
    
 ### Identifying coding regions using TransDecoder   
 
@@ -423,5 +376,56 @@ Once the run is completed it will create the following files in the directory.
 coding_regions
 ├── pfam.domtblout
 ```
+
+
+
+## 5. Determining and Removing Redundent Transcripts
+
+### Clustering using vsearch
+Because we used RNA reads to sequence our transcriptome, chances are that there are multiples of the same reads varying slightly which create multiples of the same assembled sequence. Under this assumption, we may also assume that most of the modules in our assembled transcriptome are actually repeats, the results of the assembly of slightly different reads from the same gene. We want to remove the repeats of these modules to shorten the length of our transcriptome and make for more efficient work in the future. We can do this by partitioning and clustering the transcriptome, then taking only one module from each of the clusters. There is a very convenient software which performs all of this for us in the exact way just described: [vsearch](https://github.com/torognes/vsearch).
+
+To obtain a set of unique genes from both runs, we will cluster the two resulting assemblies together. First, the two assembies will be combined into one file using the Unix command cat, which refers to concatanate.
+
+```bash
+cat ../Assembly/trinity_U13.Trinity.fasta \
+        ../Assembly/trinity_U32.Trinity.fasta \
+        ../Assembly/trinity_K32.Trinity.fasta >> combine.fasta
+```
+
+Once the files are combined, we will use vsearch to find redundancy between the assembled transcripts and create a single output known as a centroids file. The threshold for clustering in this example is set to 80% identity. 
+```bash
+module load vsearch/2.4.3
+
+vsearch --threads 32 --log LOGFile \
+        --cluster_fast combine.fasta \
+        --id 0.80 \
+        --centroids centroids.fasta \
+        --uc clusters.uc
+
+```
+
+Command options in the vsearch program that we used:
+```
+Usage: vsearch [OPTIONS]
+--threads INT               number of threads to use, zero for all cores (0)
+--log FILENAME              write messages, timing and memory info to file
+--cluster_fast FILENAME     cluster sequences after sorting by length
+--id REAL                   reject if identity lower, accepted values: 0-1.0
+--centroids FILENAME        output centroid sequences to FASTA file
+--uc FILENAME               specify filename for UCLUST-like output
+```
+
+The full script is called [vsearch.sh](/Clustering/vsearch.sh), which can be found in the **Clustering** folder. At the end of the run it will produce the following files:
+```
+Clustering/
+├── centroids.fasta
+├── clusters.uc
+├── combine.fasta
+└── LOGFile
+```
+
+The _centroids.fasta_ will contain the unique genes from the three asseblies.
+
+
 
  
