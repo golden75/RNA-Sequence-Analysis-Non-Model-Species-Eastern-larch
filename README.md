@@ -334,7 +334,7 @@ Our first step is to determine all [open-reading-frames](https://en.wikipedia.or
 ```
 module load TransDecoder/5.3.0
 
-TransDecoder.LongOrfs -t ../../Assembly/trinity_combine.fasta
+TransDecoder.LongOrfs -t ../Assembly/trinity_combine.fasta
 ```
 
 The command useage would be:
@@ -378,6 +378,8 @@ Other expert options:
 --cpu <n>     : number of parallel CPU workers to use for multithreads  [2]
 ```
 
+It is absolutely vital that you place these arguments in the order in which they appear above. You do not want 'hmmscan' thinking your centroids are your database and your database are your centroids!    
+
 
 Once the run is completed it will create the following files in the directory.
 
@@ -385,8 +387,56 @@ Once the run is completed it will create the following files in the directory.
 coding_regions
 ├── pfam.domtblout
 ```
+    
+Lastly we use the 'TransDecoder.Predict' function to predict the coding regions we should expect in our transcriptome using the output from hmmscan (the pfam.domtblout file).   
+   
+```bash
+TransDecoder.Predict -t ../Assembly/trinity_combine.fasta \
+        --retain_pfam_hits pfam.domtblout \
+        --cpu 16
+```   
+   
+Usage of the command:   
+```
+Transdecoder.LongOrfs
 
+Required:
+-t <string>        : transcripts.fasta
 
+Common options:
+--retain_pfam_hits : domain table output file from running hmmscan to search Pfam (see transdecoder.github.io for info)
+```   
+   
+This will add output to our `trinity_combine.fasta.transdecoder_dir`, which now looks like:
+```
+Coding_Regions/
+├── pfam.domtblout
+├── pipeliner.38689.cmds
+├── pipeliner.5719.cmds
+├── pipeliner.63894.cmds
+├── trinity_combine.fasta.transdecoder.bed
+├── trinity_combine.fasta.transdecoder.cds
+├── trinity_combine.fasta.transdecoder_dir/
+│   ├── base_freqs.dat
+│   ├── hexamer.scores
+│   ├── longest_orfs.cds
+│   ├── longest_orfs.cds.best_candidates.gff3
+│   ├── longest_orfs.cds.best_candidates.gff3.revised_starts.gff3
+│   ├── longest_orfs.cds.scores
+│   ├── longest_orfs.cds.top_500_longest
+│   ├── longest_orfs.cds.top_longest_5000
+│   ├── longest_orfs.cds.top_longest_5000.nr
+│   ├── longest_orfs.gff3
+│   └── longest_orfs.pep
+├── trinity_combine.fasta.transdecoder.gff3
+└── trinity_combine.fasta.transdecoder.pep
+```
+
+The full script is called [transdecoder.sh](/Coding_Regions/transdecoder.sh), which is located in the `Coding_Regions` directory.    
+In the next step we will be using the *trinity_combine.fasta.transdecoder.cds* fasta file for creating consensus sequence.   
+   
+     
+    
 
 ## 5. Determining and Removing Redundent Transcripts
 
@@ -395,19 +445,14 @@ Because we used RNA reads to sequence our transcriptome, chances are that there 
 
 To obtain a set of unique genes from both runs, we will cluster the two resulting assemblies together. First, the two assembies will be combined into one file using the Unix command cat, which refers to concatanate.
 
-```bash
-cat ../Assembly/trinity_U13.Trinity.fasta \
-        ../Assembly/trinity_U32.Trinity.fasta \
-        ../Assembly/trinity_K32.Trinity.fasta >> combine.fasta
-```
-
-Once the files are combined, we will use vsearch to find redundancy between the assembled transcripts and create a single output known as a centroids file. The threshold for clustering in this example is set to 80% identity. 
+Since we have selected our reads according to the coding regions in the previous step, we will use vsearch to find redundancy between the assembled transcripts and create a single output known as a centroids file. The threshold for clustering in this example is set to 80% identity. In this step we will be working in the **Clustering** directory:   
+ 
 ```bash
 module load vsearch/2.4.3
 
-vsearch --threads 32 --log LOGFile \
-        --cluster_fast combine.fasta \
-        --id 0.80 \
+vsearch --threads 8 --log LOGFile \
+        --cluster_fast ../Coding_Regions/trinity_combine.fasta.transdecoder.cds \
+        --id 0.90 \
         --centroids centroids.fasta \
         --uc clusters.uc
 
@@ -433,8 +478,84 @@ Clustering/
 └── LOGFile
 ```
 
-The _centroids.fasta_ will contain the unique genes from the three asseblies.
+The _centroids.fasta_ will contain the unique genes from the four assemblies. 
+    
+     
+     
+## 6. Creating An Index   
+
+### Creating an index using Kallisto   
+
+In this step we will be working in the *index* directory. Before aligning the reads we need to create a index for the created transcoder assembly. We will be using [Kallisto](https://pachterlab.github.io/kallisto/)  to build the index using the following command:
+
+```bash
+module load kallisto/0.44.0
+
+kallisto index -i Eastern_larch_index ../Clustering/centroids.fasta
+```   
+    
+Arguments used for creating the index file:
+```
+Usage: kallisto index [arguments] FASTA-files
 
 
+Required argument:
+-i, --index=STRING          Filename for the kallisto index to be constructed
 
+```  
+    
+This will create a kallisto index of the *centroids.fasta* FASTA file, where it will create the following file:   
+```
+Index/
+└── Eastern_larch_index
+```
+    
+   
+    
+## 7. Aligning the Reads to the Index and Generating Counts
+   
+### Aligning the reads using kallisto and generating counts  
+
+In this step we will be working in **Counts** directory, and will be using the the `kallisto quant` command to run the quantification algorithm. As for this tutorial moving forward we will only going to do a pairwise comparison for tutorials time constrans, so we are only doing to compare time points 2 and 3 using the Killingworth tree here.  
  
+
+```bash
+module load kallisto/0.44.0
+
+kallisto quant -i ../Kallisto_Index/Eastern_larch_index \
+        -o K23 \
+        -t 8 \
+        ../Quality_Control/trim_K23_R1.fastq ../Quality_Control/trim_K23_R2.fastq
+
+kallisto quant -i ../Kallisto_Index/Eastern_larch_index \
+        -o K32 \
+        -t 8 \
+        ../Quality_Control/trim_K32_R1.fastq ../Quality_Control/trim_K32_R2.fastq
+
+``` 
+    
+Usage information of the `kallisto quant`:
+```
+Usage: kallisto quant [arguments] FASTQ-files
+
+Required arguments:
+-i, --index=STRING            	Filename for the kallisto index to be used for quantification
+-o, --output-dir=STRING       Directory to write output to
+
+Optional arguments:
+-t, --threads=INT             Number of threads to use (default: 1)
+```   
+   
+    
+**kallisto** can process either paired-end or single-end reads. The default running mode is paired-end reads and need a even number of FASTQ files for represent the pairs as in above. When running single end reads please check the [kallisto manual](https://pachterlab.github.io/kallisto/manual) for correct parameters.   
+
+By running the quantification algorithum it will produce three output files: 
+ *  abundance.h5  : HDF5 binary file   
+	It contains run information, abundance estimates, bootstrap estimates and transcript lenght information
+ *  abundance.tsv : plaintext file of the abundance estimates  
+	This contains effective length, estimated counts and TPM values  
+ *  run_info.json : information on the run  
+  
+   
+
+
