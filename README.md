@@ -319,13 +319,22 @@ So we will have three assembly files, one for each condition or time step.
    
 ### Identifying coding regions using TransDecoder   
 
-Now that we have our reads assembled and clustered together into the single centroids file, we can use [TransDecoder](https://github.com/TransDecoder/TransDecoder/wiki) to determine optimal open reading frames from the assembly (ORFs). Assembled RNA-Seq transcripts may have 5′ or 3′ UTR sequence attached and this can make it difficult to determine the CDS in non-model species. We will not be going into how TransDecoder works. However, should you click the link you'll be happy to see that they have a very simple one paragraph explanation telling you exactly that.
+Now we have our assembled transcriptomes for the each of the libraries. Before looking for the coding regions we will combine all the assemblies together. We will be working in the `Coding_Regions` directory, and for this we will use the UNIX command `cat` as follows:  
+
+```bash
+cat ../Assembly/trinity_U13.Trinity.fasta \
+	../Assembly/trinity_U32.Trinity.fasta \
+	../Assembly/trinity_K32.Trinity.fasta \
+	../Assembly/trinity_K23.Trinity.fasta >> trinity_combine.fasta
+``` 
+
+Now that we have our reads assembled and combined together into the single file, we can use [TransDecoder](https://github.com/TransDecoder/TransDecoder/wiki) to determine optimal open reading frames from the assembly (ORFs). Assembled RNA-Seq transcripts may have 5′ or 3′ UTR sequence attached and this can make it difficult to determine the CDS in non-model species. We will not be going into how TransDecoder works. However, should you click the link you'll be happy to see that they have a very simple one paragraph explanation telling you exactly that.
 Our first step is to determine all [open-reading-frames](https://en.wikipedia.org/wiki/Open_reading_frame). We can do this using the 'TransDecoder.LongOrfs' command. This command is quite simple, with one option, '-t', which is simply our centroid fasta! The command is therefore:   
    
 ```
 module load TransDecoder/5.3.0
 
-TransDecoder.LongOrfs -t ../clustering/centroids.fasta
+TransDecoder.LongOrfs -t ../../Assembly/trinity_combine.fasta
 ```
 
 The command useage would be:
@@ -341,7 +350,7 @@ By default it will identify ORFs that are at least 100 amino acids long. (you ca
 
 ```
 coding_regions
-├── centroids.fasta.transdecoder_dir
+├── trinity_combine.fasta.transdecoder_dir
 │   ├── base_freqs.dat
 │   ├── longest_orfs.cds
 │   ├── longest_orfs.gff3
@@ -349,13 +358,13 @@ coding_regions
 ```
 
 
-Next step is to, identify ORFs with homology to known proteins via blast or pfam searches. This will maximize the sensitivity for capturing the ORFs that have functional significance. We will be using the Pfram databases. Pfam stands for "Protein families", and is simply an absolutely massive database with mountains of searchable information on, well, you guessed it, protein families. We can scan the Pfam databases using the software hmmer, a database homologous-sequence fetcher. The Pfam databases are much too large to install on a local computer. However, you may find them on Xanadu in the directory '/isg/shared/databases/Pfam/Pfam-B.hmm', which is an hmmer file (must be an hmmer file for hmmer to scan!).  
+Next step is to, identify ORFs with homology to known proteins via blast or pfam searches. This will maximize the sensitivity for capturing the ORFs that have functional significance. We will be using the Pfram databases. Pfam stands for "Protein families", and is simply an absolutely massive database with mountains of searchable information on, well, you guessed it, protein families. We can scan the Pfam databases using the software hmmer, a database homologous-sequence fetcher. The Pfam databases are much too large to install on a local computer. However, you may find them on Xanadu in the directory '/isg/shared/databases/Pfam/Pfam-A.hmm', which is an hmmer file (must be an hmmer file for hmmer to scan!).  
    
 ```
 hmmscan --cpu 16 \
         --domtblout pfam.domtblout \
         /isg/shared/databases/Pfam/Pfam-A.hmm \
-        centroids.fasta.transdecoder_dir/longest_orfs.pep
+        trinity_combine.fasta.transdecoder_dir/longest_orfs.pep
 ```
 
 Usage of the command:
