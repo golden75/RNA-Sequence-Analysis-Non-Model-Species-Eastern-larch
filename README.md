@@ -504,7 +504,7 @@ Required argument:
 
 ```  
     
-This will create a kallisto index of the *centroids.fasta* FASTA file, where it will create the following file:   
+The full slurm script is called [kallisto_index.sh](/Index/kallisto_index.sh) can be found in the **Index** folder. This will create a kallisto index of the *centroids.fasta* FASTA file, where it will create the following file:   
 ```
 Index/
 └── Eastern_larch_index
