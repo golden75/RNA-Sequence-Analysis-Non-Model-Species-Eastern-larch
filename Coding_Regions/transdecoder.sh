@@ -14,27 +14,33 @@
 hostname
 date
 
+##################################################
+## Combining the trinity assemblies		##
+##################################################
+
+cat ../Assembly/trinity_U13.Trinity.fasta \
+	../Assembly/trinity_U32.Trinity.fasta \
+	../Assembly/trinity_K32.Trinity.fasta \
+	../Assembly/trinity_K23.Trinity.fasta >> trinity_combine.fasta
+
+
+##################################################
+## Determine ORF using Transdecoder		##
+##################################################
 module load hmmer/3.2.1
 module load TransDecoder/5.3.0
 
 TransDecoder.LongOrfs -t ../Assembly/trinity_combine.fasta
-
-echo " == End of TransDecoder.LongOrfs == "
-date
 
 hmmscan --cpu 16 \
        --domtblout pfam.domtblout \
        /isg/shared/databases/Pfam/Pfam-A.hmm \
        trinity_combine.fasta.transdecoder_dir/longest_orfs.pep 
 
-echo " == End of hmmscan == "
-date
 
 TransDecoder.Predict -t ../Assembly/trinity_combine.fasta \
 	--retain_pfam_hits pfam.domtblout \
 	--cpu 16 
 
-echo " == End of TransDecoder.Predict == "
-date
 
 
