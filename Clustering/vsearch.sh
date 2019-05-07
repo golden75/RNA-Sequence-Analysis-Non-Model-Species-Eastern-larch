@@ -2,8 +2,8 @@
 #SBATCH --job-name=vsearch
 #SBATCH -n 1
 #SBATCH -N 1
-#SBATCH -c 48
-#SBATCH --mem=200G
+#SBATCH -c 8
+#SBATCH --mem=50G
 #SBATCH --partition=general
 #SBATCH --qos=general
 #SBATCH --mail-type=ALL
@@ -18,7 +18,7 @@ date
 # Clustering using vsearch
 module load vsearch/2.4.3
 
-vsearch --threads 32 --log LOGFile \
+vsearch --threads 8 --log LOGFile \
 	--cluster_fast ../Coding_Regions/trinity_combine.fasta.transdecoder.cds \
 	--id 0.90 \
 	--centroids centroids.fasta \
