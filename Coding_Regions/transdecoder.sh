@@ -21,7 +21,7 @@ date
 cat ../Assembly/trinity_U13.Trinity.fasta \
 	../Assembly/trinity_U32.Trinity.fasta \
 	../Assembly/trinity_K32.Trinity.fasta \
-	../Assembly/trinity_K23.Trinity.fasta >> trinity_combine.fasta
+	../Assembly/trinity_K23.Trinity.fasta >> ../Assembly/trinity_combine.fasta
 
 
 ##################################################
