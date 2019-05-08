@@ -2,7 +2,7 @@
 #SBATCH --job-name=transdecoder
 #SBATCH -n 1
 #SBATCH -N 1
-#SBATCH -c 48
+#SBATCH -c 16
 #SBATCH --mem=100G
 #SBATCH --partition=general
 #SBATCH --qos=general
