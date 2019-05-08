@@ -658,5 +658,85 @@ TRINITY_DN17708_c0_g1_i3.p1     TRINITY_DN17708_c0_g1_i3.p1     2.27485 1       
 ```  
 
 
+## 9. EnTAP - Functional Annotation for DE Genes  
+
+Once the differentially expressed genes have been identified, we need to annotate the genes to identify the function. We will take the top 10 upregulated genes from the gfold output and will do a quick annotation. In order to run the EnTAP program, we need to provide a peptide sequence of the genes which we want to do the functional annotation.   
+  
+Using the python program called [ExtractSequence.py](/EnTAP/ExtractSequence.py) we will be extracting the top upregulated genes according to the Gfold output file (K32_vs_K23.diff). 
+
+```python
+python ExtractSequence.py ../Gfold/K32_vs_K23.diff ../Coding_Regions/trinity_combine.fasta.transdecoder.pep 10
+``` 
+
+The slurm script is called [Extract_sequence.sh](/EnTAP/Extract_sequence.sh) can be found in the **EnTAP** directory. This will create a FASTA file called *ExtractedSq.fasta* which contains the peptide sequences of the top 10 up regulated genes. 
+
+Once we have the fasta file with the protein sequences we can run the enTAP program to grab the functional annotations using the following command:  
+```bash
+module load anaconda/2.4.0
+module load perl/5.24.0
+module load diamond/0.9.19
+module load eggnog-mapper/0.99.1
+module load interproscan/5.25-64.0
+
+/labs/Wegrzyn/EnTAP/EnTAP --runP -i ExtractedSq.fasta -d /isg/shared/databases/Diamond/RefSeq/plant.protein.faa.92.dmnd -d /isg/shared/databases/Diamond/Uniprot/uniprot_sprot.dmnd --ontology 0  --threads 16
+```
+   
+   
+Usage of the entap program:
+```
+Required Flags:
+--runP      with a protein input, frame selection will not be ran and annotation will be executed with protein sequences (blastp)
+-i          Path to the transcriptome file (either nucleotide or protein)
+-d          Specify up to 5 DIAMOND indexed (.dmnd) databases to run similarity search against
+
+Optional:
+-threads    Number of threads
+--ontology  0 - EggNOG (default)
+```  
+
+The full script for slurm scheduler is called [entap.sh](/EnTAP/entap.sh) can be found in the EnTAP directory. Once the job is done it will create a folder called “outfiles” which will contain the output of the program.   
+```
+EnTAP/
+└── outfiles/
+    ├── entap_out
+    │   ├── ExtractedSq.fasta
+    │   └── ExtractedSq_final.fasta
+    ├── final_annotated.faa
+    ├── final_annotated.fnn
+    ├── final_annotations_lvl0_contam.tsv
+    ├── final_annotations_lvl0_no_contam.tsv
+    ├── final_annotations_lvl0.tsv
+    ├── final_annotations_lvl3_contam.tsv
+    ├── final_annotations_lvl3_no_contam.tsv
+    ├── final_annotations_lvl3.tsv
+    ├── final_annotations_lvl4_contam.tsv
+    ├── final_annotations_lvl4_no_contam.tsv
+    ├── final_annotations_lvl4.tsv
+    ├── final_unannotated.faa
+    ├── log_file_2019.5.7-22h33m34s.txt
+    ├── ontology
+    │   └── EggNOG
+    │       ├── annotation_results.emapper.annotations
+    │       ├── annotation_results.emapper.seed_orthologs
+    │       ├── annotation_results_no_hits.emapper.annotations
+    │       ├── annotation_results_no_hits.emapper.seed_orthologs
+    │       ├── annotation_std.err
+    │       ├── annotation_std.out
+    │       └── processed
+    │           ├── annotated_sequences.faa
+    │           ├── annotated_sequences.fnn
+    │           ├── unannotated_sequences.faa
+    │           └── unannotated_sequences.fnn
+    └── similarity_search
+        ├── blastp_ExtractedSq_final_plant.protein.faa.92.out
+        ├── blastp_ExtractedSq_final_plant.protein.faa.92_std.err
+        ├── blastp_ExtractedSq_final_plant.protein.faa.92_std.out
+        ├── blastp_ExtractedSq_final_uniprot_sprot.out
+        ├── blastp_ExtractedSq_final_uniprot_sprot_std.err
+        ├── blastp_ExtractedSq_final_uniprot_sprot_std.out
+        ├── overall_results
+        └── processed/
+```
+
 
 
