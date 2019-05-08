@@ -14,8 +14,9 @@
 hostname
 date
 
-
-# Clustering using vsearch
+##################################################
+##  	Clustering using vsearch		##
+##################################################
 module load vsearch/2.4.3
 
 vsearch --threads 8 --log LOGFile \
