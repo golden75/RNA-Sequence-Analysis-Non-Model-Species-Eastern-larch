@@ -41,6 +41,12 @@ Eastern_larch/
 ├── Raw_Reads
 ├── Quality_Control
 ├── Assembly
+├── Coding_Regions
+├── Clustering
+├── Index
+├── Counts
+├── Gfold
+└── EnTAP
 ```  
    
    
