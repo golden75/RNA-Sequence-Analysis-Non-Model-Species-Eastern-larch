@@ -310,7 +310,9 @@ _Butterfly_ then processes the individual graphs in parallel, tracing the paths 
 During the **Trinity** run there will be lots of files will be grenerated. These checkpoint files will help us to restart from that specific point if for some reason the program stops for some other problems. Once the program ends sucessfully all these checkpoint files will be removed since we have requested a full cleanup using the `--full_cleanup` command. Clearing the files is very important as it will help us to remove all the unwanted files and also to keep the storage capacity and the number of files to a minimum. So at the end of a successful run we will end up with the following files:   
    
 ```
-Assembly
+Assembly/
+├── trinity_K23.Trinity.fasta
+├── trinity_K23.Trinity.fasta.gene_trans_map
 ├── trinity_K32.Trinity.fasta
 ├── trinity_K32.Trinity.fasta.gene_trans_map
 ├── trinity_U13.Trinity.fasta
@@ -334,7 +336,7 @@ Now we have our assembled transcriptomes for the each of the libraries. Before l
 cat ../Assembly/trinity_U13.Trinity.fasta \
 	../Assembly/trinity_U32.Trinity.fasta \
 	../Assembly/trinity_K32.Trinity.fasta \
-	../Assembly/trinity_K23.Trinity.fasta >> trinity_combine.fasta
+	../Assembly/trinity_K23.Trinity.fasta >> ../Assembly/trinity_combine.fasta
 ``` 
 
 Now that we have our reads assembled and combined together into the single file, we can use [TransDecoder](https://github.com/TransDecoder/TransDecoder/wiki) to determine optimal open reading frames from the assembly (ORFs). Assembled RNA-Seq transcripts may have 5′ or 3′ UTR sequence attached and this can make it difficult to determine the CDS in non-model species. We will not be going into how TransDecoder works. However, should you click the link you'll be happy to see that they have a very simple one paragraph explanation telling you exactly that.
