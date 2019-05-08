@@ -9,6 +9,9 @@ Contents
 2. [Quality Control](#2-quality-control)   
 3. [Assembling the Transcriptome](#3-assembling-the-transcriptome)  
 4. [Identifying the Coding Regions](#4-identifying-the-coding-regions)  
+5. [Determining and Removing Redundent Transcripts](#5-determining-and-removing-redundent-transcripts)
+6. [Creating An Index](#6-creating-an-index)
+7. [Aligning the Reads to the Index and Generating Counts](#7-aligning-the-reads-to-the-index-and-generating-counts)
  
  
  
@@ -547,7 +550,8 @@ Optional arguments:
 ```   
    
     
-**kallisto** can process either paired-end or single-end reads. The default running mode is paired-end reads and need a even number of FASTQ files for represent the pairs as in above. When running single end reads please check the [kallisto manual](https://pachterlab.github.io/kallisto/manual) for correct parameters.   
+**kallisto** can process either paired-end or single-end reads. The default running mode is paired-end reads and need a even number of FASTQ files for represent the pairs as in above. When running single end reads please check the [kallisto manual](https://pachterlab.github.io/kallisto/manual) for correct parameters. The complete slurm script is called [kallisto_counts.sh](/Counts/kallisto_counts.sh) which is stored in the **Counts** directory.  
+  
 
 By running the quantification algorithum it will produce three output files: 
  *  abundance.h5  : HDF5 binary file   
@@ -557,5 +561,28 @@ By running the quantification algorithum it will produce three output files:
  *  run_info.json : information on the run  
   
    
+When you run the above kallisto quantification algorithm, it will produce the following output:  
+```
+Counts/
+├── K23/
+│   ├── abundance.h5
+│   ├── abundance.tsv
+│   └── run_info.json
+└── K32/
+    ├── abundance.h5
+    ├── abundance.tsv
+    └── run_info.json
+```
+
+Now if you look at the first few lines in the _abundance.tsv_ file using the `head` command. We can see that, it has five columns which are _geneID_, _gene length_, _effective gene length_, _estimated counts_ and _tpm_ values.  
+
+```
+target_id	length	eff_length	est_counts	tpm
+TRINITY_DN27913_c0_g1_i1.p3	13230	13072.3	172	0.861807
+TRINITY_DN27054_c1_g6_i1.p1	11508	11350.3	183.401	1.05834
+TRINITY_DN26839_c0_g2_i1.p1	10935	10777.3	16.3293	0.099241
+TRINITY_DN21012_c2_g1_i3.p1	10839	10681.3	172	1.05472
+```
+
 
 
