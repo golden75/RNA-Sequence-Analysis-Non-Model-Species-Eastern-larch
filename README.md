@@ -585,4 +585,78 @@ TRINITY_DN21012_c2_g1_i3.p1	10839	10681.3	172	1.05472
 ```
 
 
+## 8. Differentially Expressed Genes using Gfold  
+   
+In here we are trying to get the differentially expressed genes between two conditions. In such situations where there is no replicates avaliable [Gfold](https://zhanglab.tongji.edu.cn/softwares/GFOLD/index.html) is very useful. Gfold program will generalizes the fold change by cosidering the posterior distribution of log fold change, such that it is assigned a reliable fold change. Gfold overcomes the shortcommings of p-value and read counts with low read counts.   
+ 
+In order to get fold change using Gfold program, you need to provide a count file in a perticular format. For the Gfold program the count file should contain 5 columns, where it should contain _GeneSymbol_, _GeneName_, _Read Count_, _Gene exon length_ and _RPKM_. In this input most important columns are _Gene Symbol_ and _Read Count_ information.   
+  
+We will use the kallisto generated _abundance.tsv_ file and reformat it, so it will contain the fields which Gfold program needs as its input. For reformating you can use any programing language that you like. But in here we will be using `awk` to manipulate these columns. AWK is a very powefull language which allows you to get usefull infomation.  
+   
+```awk
+awk '{print $1 "\t" $1 "\t" $4 "\t" $2 "\t" $5 }' ../Counts/K23/abundance.tsv > K23.read_cnt
+awk '{print $1 "\t" $1 "\t" $4 "\t" $2 "\t" $5 }' ../Counts/K32/abundance.tsv > K32.read_cnt
+```  
+
+You can run this command in a interative session or can run the [count2gfoldCounts.sh](/Gfold/count2gfoldCounts.sh) script using shell in a interative session. 
+```bash
+sh count2gfoldCounts.sh
+```  
+
+This will produce counts files which are in Gfold format.  
+```
+Gfold/
+├── K23.read_cnt
+└── K32.read_cnt
+```   
+   
+Gfold program does not take the header row so either you have to delete the first row or comment out the header before you run the progra
+m. Now if you look at any of these files it will now contain five columns as follows:
+```
+TRINITY_DN27913_c0_g1_i1.p3	TRINITY_DN27913_c0_g1_i1.p3	3561	13230	12.3338
+TRINITY_DN27054_c1_g6_i1.p1	TRINITY_DN27054_c1_g6_i1.p1	3895.81	11508	15.5417
+TRINITY_DN26839_c0_g2_i1.p1	TRINITY_DN26839_c0_g2_i1.p1	1220.95	10935	5.12987
+TRINITY_DN21012_c2_g1_i3.p1	TRINITY_DN21012_c2_g1_i3.p1	3349	10839	14.1975
+TRINITY_DN17708_c0_g1_i3.p1	TRINITY_DN17708_c0_g1_i3.p1	967	9297	4.79158
+```
+
+### Using Gfold the get differentially expressed genes  
+
+Now since we have the counts files in the correct format, we will run the Gfold using the following command. We will be using the K23.read_cnt and K32.read_cnt as input files.
+```bash
+module load gfold/1.1.4
+
+gfold diff -s1 K32 -s2 K23 -suf .read_cnt -o K32_vs_K23.diff
+``` 
+
+Usage information of the gfold:
+```
+gfold diff [options]
+
+-s1      sample-1
+-s2      sample-2
+-o	 output file name
+-suf	 input files extention
+```
+   
+The complete slurm script is called [gfold.sh](/Gfold/gfold.sh) which is stored in the **Gfold** directory. By running the Gfold program it will generate the following files, which contains the fold change value between the two conditions.
+```
+Gfold/
+├── K32_vs_K23.diff
+└── K32_vs_K23.diff.ext
+```   
+   
+Gfold value can be considered as a log2-fold change value, where possitive/negative value will indicate its up/down regulated. First few lines in the *K32_vs_K23.diff* will be like:  
+
+```
+#GeneSymbol     GeneName        GFOLD(0.01)     E-FDR   log2fdc 1stRPKM 2ndRPKM
+TRINITY_DN27913_c0_g1_i1.p3     TRINITY_DN27913_c0_g1_i1.p3     2.49054 1       2.74244 2.33862 22.549
+TRINITY_DN27054_c1_g6_i1.p1     TRINITY_DN27054_c1_g6_i1.p1     2.53847 1       2.78281 2.8605  28.3545
+TRINITY_DN26839_c0_g2_i1.p1     TRINITY_DN26839_c0_g2_i1.p1     3.81393 1       4.54498 0.263204        9.34665
+TRINITY_DN21012_c2_g1_i3.p1     TRINITY_DN21012_c2_g1_i3.p1     2.4016  1       2.65392 2.8545  25.8846
+TRINITY_DN17708_c0_g1_i3.p1     TRINITY_DN17708_c0_g1_i3.p1     2.27485 1       2.74287 0.890033        8.71362
+```  
+
+
+
 
