@@ -24,7 +24,7 @@ When an organism is called "model" there is an underlying assumption that very g
 
 ![ out line ](/images/outline_wide.png)  
 
-The data consists of 4 libraries under three different time points (roughly one month apart):  
+The data consists of 4 libraries under two different time points (roughly one month apart). This is representing 3 tree for two populations (U and K).  
 *  U32 : UConn Tree 3, at time point 2  
 *  U13 : UConn Tree 1, at time point 3  
 *  K32 : Killingworth Tree 2, at time point 2   
@@ -558,7 +558,7 @@ Optional arguments:
 ```   
    
     
-**kallisto** can process either paired-end or single-end reads. The default running mode is paired-end reads and need a even number of FASTQ files for represent the pairs as in above. When running single end reads please check the [kallisto manual](https://pachterlab.github.io/kallisto/manual) for correct parameters. The complete slurm script is called [kallisto_counts.sh](/Counts/kallisto_counts.sh) which is stored in the **Counts** directory.  
+**kallisto** can process either paired-end or single-end reads. The default running mode is paired-end reads and need a even number of FASTQ files, for represent the pairs as shown in above example. When running single end reads please check the [kallisto manual](https://pachterlab.github.io/kallisto/manual) for correct parameters. The complete slurm script is called [kallisto_counts.sh](/Counts/kallisto_counts.sh) which is stored in the **Counts** directory.  
   
 
 By running the quantification algorithum it will produce three output files: 
