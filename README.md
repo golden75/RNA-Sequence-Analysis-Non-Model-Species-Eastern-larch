@@ -34,6 +34,14 @@ The data consists of 4 libraries under two different time points (roughly one mo
   
 In this workflow we have seperated each step into folders, where you can find the appropriate scripts in conjunction with each steps. When you clone the git repository, the below directory structure will be cloned into your working directory.   
 
+So to follow the steps would be esay once you have cloned this git repository using the `clone` command:
+```
+git clone < git-repository.git >
+
+```
+
+Once you clone the repository you can see the following folder structure:  
+
 ```  
 Eastern_larch/
 ├── Raw_Reads
@@ -67,6 +75,12 @@ The tutorial will be using SLURM schedular to submit jobs to Xanadu cluster. In 
 
 Before beginning, we need to understand a few aspects of the Xanadu server. When first logging into Xanadu from your local terminal, you will be connected to the submit node. The submit node is the interface with which users on Xanadu may submit their processes to the desired compute nodes, which will run the process. Never, under any circumstance, run processes directly in the submit node. Your process will be killed and all of your work lost! This tutorial will not teach you shell script configuration to submit your tasks on Xanadu. Therefore, before moving on, read and master the topics covered in the [Xanadu tutorial](https://bioinformatics.uconn.edu/resources-and-events/tutorials-2/xanadu/).  
   
+### Linking the Raw Reads data  
+
+These data files are only avaliable through Xanadu cluster, as they belong to the Dr. Jill Wegrzyn lab. If you are working in the Xanadu cluster to avoid redundancy in the data files, you can create a simlink to the read files. After creating sim-links you can work your way though the rest of the steps as we have discussed in the tutorial. 
+
+So in the **Raw_Reads** folder we have created a script to creat a sim-links for the actual data, which is called [raw_data_simlinks.sh](/Raw_Reads/raw_data_simlinks.sh), You can run this script using `sbatch` command.  
+ 
   
 Raw_Reads folder will look like:  
 ```
