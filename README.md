@@ -784,6 +784,55 @@ myfactors <- data.frame(Sample, Condition, TimePoint)
 myfactors
 ```   
 
+Once the myfactors dataframe is created it is important to check the columns in the dataframe(m) and mata-data rows are in the the same order.  
+
+```r
+# first check wheter all the columns in dataframe(m) and myfactor is present
+all(colnames(m) %in% myfactors$Sample)
+
+# Then check the order is correct
+all(rownames(m) == myfactors$Sample[1])
+
+# Then order them according to the Sample names
+m <- m[, myfactors$Sample]
+
+# Now check the order is correct after sorting 
+all(colnames(m) == myfactors$Sample)
+```   
+
+As the next step we will create the NOISeq object using the count dataframe and factors dataframe created above.  
+
+```r
+#####################################################
+##  NOISeq          
+#####################################################
+
+library(NOISeq)
+
+# Creating a NOISeq object
+mydata <- readData(data = m, factors = myfactors)
+mydata
+
+head(assayData(mydata)$exprs)
+head(pData(mydata))
+```   
+
+*PCA Plots*  
+Principle component analysis plots can be obtained using the package. Before generating anytype of plots, *dat* function must be applied on the input data which is the NOISeq object to obtain the data which is needed. This can be passed using the _type_ argument. Once the data is generated to plot, image can be generated using the _explo.plot_ function.  
+
+PCA component analysis is a technique whcich can be used to visualize if the expreimental samples are clustered according to the experimental design. 
+
+```r
+##############
+## PCA
+#############
+myPCA = dat(mydata, type = "PCA")
+explo.plot(myPCA, factor= "TimePoint")
+```   
+
+![](images/PCA_plot.png)  
+
+
 
 
 ## 9. EnTAP - Functional Annotation for DE Genes  
