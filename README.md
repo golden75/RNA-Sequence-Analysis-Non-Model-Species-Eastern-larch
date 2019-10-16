@@ -609,7 +609,11 @@ TRINITY_DN21012_c2_g1_i3.p1	10839	10681.3	172	1.05472
 ```
 
 
-## 8. Differentially Expressed Genes using Gfold  
+## 8. Differentially Expressed Genes 
+  
+
+### a. Differentially Expressed Genes using Gfold   
+
    
 In here we are trying to get the differentially expressed genes between two conditions. In such situations where there is no replicates avaliable [Gfold](https://zhanglab.tongji.edu.cn/softwares/GFOLD/index.html) is very useful. Gfold program will generalizes the fold change by cosidering the posterior distribution of log fold change, such that it is assigned a reliable fold change. Gfold overcomes the shortcommings of p-value and read counts with low read counts.   
  
@@ -680,6 +684,38 @@ TRINITY_DN26839_c0_g2_i1.p1     TRINITY_DN26839_c0_g2_i1.p1     3.81393 1       
 TRINITY_DN21012_c2_g1_i3.p1     TRINITY_DN21012_c2_g1_i3.p1     2.4016  1       2.65392 2.8545  25.8846
 TRINITY_DN17708_c0_g1_i3.p1     TRINITY_DN17708_c0_g1_i3.p1     2.27485 1       2.74287 0.890033        8.71362
 ```  
+
+
+### a. Differentially Expressed Genes using NOISeq  
+
+Another program which is usefull in finding differentially expressed genes when there are no replicates is [NOISeq](https://bioconductor.org/packages/release/bioc/html/NOISeq.html) which is a R backage. It can be use to get explortory plots to evaluate count distribution, types of detected features, and differential expression between two conditions.   
+  
+In order to get the expressed genes using NOISeq program, you need to provide the count files as the input. For that we will use the kallisto generated count files which can be found in *abundance.tsv* files generated for each sample in the indexing step. As the abundance.tsv file will contain _GeneSymbol, GeneName, Read Count, Gene exon length and RPKM_ and we will use a *awk* command to grab only the _GeneSymbol_ and _Read Count_ from the *abundance.tsv* file.  
+
+```
+awk '{print $1 "\t" $4}' ../Counts/K23/abundance.tsv > K23.counts
+awk '{print $1 "\t" $4}' ../Counts/K32/abundance.tsv > K32.counts
+```   
+
+You can run this command in a interative session or can run the [counts.sh](/NOISeq/counts.sh) script using shell in a interative session.   
+  
+```bash
+sh counts.sh
+```   
+
+This will produce counts files with two columns where it will contain the Gene Name and the counts associated with it.   
+
+```
+NOISeq/
+├── K23.counts
+└── K32.counts
+```   
+
+  
+### NOISeq to produce differnetially expressed genes   
+
+ 
+
 
 
 ## 9. EnTAP - Functional Annotation for DE Genes  
