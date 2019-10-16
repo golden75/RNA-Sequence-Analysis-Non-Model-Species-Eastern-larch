@@ -733,7 +733,56 @@ csv_out <- getwd()
 image_out <- getwd()
 ```   
 
-Next we will 
+Next we will create a dataframe to hold the count files by reading one at a time.  
+```r
+##  Read count files AND creating a dataframe to hold the count data
+
+#create a empty dataframe called m to merge the data into
+m = data.frame()
+# using for loop read all the count files in the count_dir path
+for (i in list.files(pattern = ".counts")) {
+  print(paste0("reading file: ", i))
+  #read file as a data frame
+  
+  f <- read.table(i, sep = "\t", header = TRUE)
+  #rename the columns
+  colnames(f) <- c("gene_id", substr(i, 1, nchar(i)-7))
+  #copy the data to another dataframe called f1
+  f1 <- subset(f, select= c("gene_id", substr(i, 1, nchar(i)-7)))
+  
+  #if the m is empty just copy the f to m
+  if(length(m) == 0){
+    m = f1
+    
+  } else 
+  {
+    #if the dataframe is not empty then merge the data
+    m <- merge(m, f1, by.x = "gene_id", by.y = "gene_id")
+  }
+  rm(f1)
+}
+
+#grab the rows from the 1st colum and use it as the row-names in the dataframe
+rownames(m) <- m[,1]
+
+# remove the column-1 (gene_ids) from the data frame using dplyr::select function
+m <- select(m, "K23", "K32")
+```   
+
+Once the dataframe is created each column is represented by a sample and the rows with feature counts.  
+ 
+Next we will prepare the meta data for the analysis. In here we can include the samples and different conditions we are hoping the evaluate. For this experiment we have two time points of data from a same location we will include that using TimePoint as a condition, which we would like to evaluate.   
+
+```r
+#################################################
+## MetaData
+#################################################
+Sample = c("K32", "K23")
+Condition = c("Killingworth", "Killingworth")
+TimePoint = c("T2", "T3")
+myfactors <- data.frame(Sample, Condition, TimePoint)
+myfactors
+```   
 
 
 
