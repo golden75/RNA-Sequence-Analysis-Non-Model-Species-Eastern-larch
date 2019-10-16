@@ -11,6 +11,8 @@ Contents
 6. [Creating An Index](#6-creating-an-index)
 7. [Aligning the Reads to the Index and Generating Counts](#7-aligning-the-reads-to-the-index-and-generating-counts)
 8. [Differentially Expressed Genes using Gfold](#8-differentially-expressed-genes-using-gfold)
+     a.   Gfold   
+     b.   NOISeq
 9. [EnTAP - Functional Annotation for DE Genes](#9-entap---functional-annotation-for-de-genes) 
 
  
