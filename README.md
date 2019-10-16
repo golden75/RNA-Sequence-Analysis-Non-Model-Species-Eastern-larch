@@ -714,7 +714,26 @@ NOISeq/
   
 ### NOISeq to produce differnetially expressed genes   
 
- 
+This part can be run using the cluster or using your own PC or laptop. We do recommend transfering the above counts files to your own computer and run using RStudio package.  
+
+*Prerequiests* Before using the NOISeq package you need to make sure you have already downloaded the required packages including NOISeq and dplyr packages. If not please download the necessary packages which is compatible with your version of R included in the RStudio/R.  
+
+When running the R code discribed below will assume you have downloaded the count files to your R working directory.   
+
+We will load the the *dplyr* library and will set the paths to the input count files and output files which will be generated during the execution of the program. The following script will produce csv files and image files to the current directory, if you would like to direct it to a different location you are welcome to do so be changing the path of the output.  
+
+```r
+library(dplyr)
+
+list.files()
+
+#Set directory paths to working directory
+count_dir <- getwd()
+csv_out <- getwd()
+image_out <- getwd()
+```   
+
+Next we will 
 
 
 
