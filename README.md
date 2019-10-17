@@ -857,6 +857,69 @@ mynoiseq.sim <-  noiseq(mydata,
                         replicates = "no")
 ```  
 
+noiseq function can be used to calculate differential expression between two conditions, which might have technical replicates or no-replicates at all.   
+**norm** is the normalization method to be used, which can be rpkm by default, or uqua (upper quartile), tmm (trimmed mean of M) or n which is no normalization.   
+
+This will produce a noiseq object which contains following elements:
+
+```bash
+Summary 1 
+=========
+
+You are comparing T2 - T3 from TimePoint 
+
+                                T2_mean    T3_mean         M         D prob   ranking
+TRINITY_DN12413_c0_g1_i1.p1  296.778114   2.260921  7.036330  294.5172    1  294.6012
+TRINITY_DN13923_c0_g1_i2.p1 1139.652835   7.632735  7.222179 1132.0201    1 1132.0431
+TRINITY_DN17198_c0_g1_i2.p1    3.843722 277.103498 -6.171777  273.2598    1 -273.3295
+TRINITY_DN17257_c0_g1_i1.p1  312.418828   1.004854  8.280352  311.4140    1  311.5240
+TRINITY_DN1780_c0_g1_i1.p1   367.784190   1.758494  7.708375  366.0257    1  366.1069
+TRINITY_DN18170_c0_g1_i1.p1  383.423108   4.019415  6.575808  379.4037    1  379.4607
+
+Normalization
+	method: rpkm 
+	k: 0.5 
+	lc: 0 
+
+You are working with simulated replicates:
+	pnr: 0.2 
+	nss: 5 
+	v: 0.02 
+```   
+
+#### Selecting differentially expressed features  
+
+The next step would be, how to select the differentially expressed features. This can be done using **degenes** function and applying a threshold using the q value. With the argument M, we can choose if we want all the differentially expressed genes (NULL), only the differentially expressed features that are more expressed in condition 1 than in condition 2 (M="up") or only the features which are under expressed in condition 1 with regard to condition 2 (M = "down").  
+
+```r
+mynoiseq.sim.deg = degenes(mynoiseq.sim, q = 0.8, M = NULL)
+```  
+```
+[1] "34854 differentially expressed features"
+```
+
+```r 
+mynoiseq.sim.deg_up = degenes(mynoiseq.sim, q = 0.8, M = "up")
+```  
+```
+[1] "21868 differentially expressed features (up in first condition)"
+```  
+
+```r
+mynoiseq.sim.deg_down = degenes(mynoiseq.sim, q = 0.8, M = "down")
+```  
+```
+[1] "12986 differentially expressed features (down in first condition)"
+```  
+
+These features can be written into a csv file using the following command.
+```r
+prefix = "T1_T2_noiseq"
+write.csv(mynoiseq.sim.deg_up, file = paste0(csv_out, "/" ,prefix, "_DEgenes_up.csv"))
+write.csv(mynoiseq.sim.deg_down, file = paste0(csv_out, "/", prefix, "_DEgenes_down.csv"))
+```   
+
+ 
  
 
 
