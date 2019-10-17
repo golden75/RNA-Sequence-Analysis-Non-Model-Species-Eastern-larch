@@ -850,10 +850,6 @@ mynoiseq.sim <-  noiseq(mydata,
                         factor = "TimePoint",
                         k = 0.5,
                         norm = "rpkm",
-                        pnr = 0.2,
-                        nss = 5,
-                        v = 0.02,
-                        lc = 0,
                         replicates = "no")
 ```  
 
@@ -918,6 +914,36 @@ prefix = "T1_T2_noiseq"
 write.csv(mynoiseq.sim.deg_up, file = paste0(csv_out, "/" ,prefix, "_DEgenes_up.csv"))
 write.csv(mynoiseq.sim.deg_down, file = paste0(csv_out, "/", prefix, "_DEgenes_down.csv"))
 ```   
+
+
+#### Plots  
+Once the differential expression is computed using the NOISeq package we can generate plots to highlight differentiall expressed features using **DE.plot** function.
+
+#### Expression plot
+Expression values can be plotted using the **DE.plot** function, by selecting _q=0.9_ we are selecting differentially expressed features to highlighted in red.  
+
+```r
+## Plots
+## Expression Plot
+jpeg("T1_T2_expression.jpeg")
+DE.plot(mynoiseq.sim, q = 0.9, graphic = "expr", log.scale = TRUE)
+dev.off()
+```   
+![](/images/T1_T2_expression.jpeg)
+
+#### MD plot  
+Using the argument _MD_, we can plot the log-fold change of M and the absolute value of difference in expression between conditions (D) instead of plotting the expression values. 
+
+```r
+## MD plot
+jpeg("T1_T2_MDplot.jpeg")
+DE.plot(mynoiseq.sim, q = 0.9, graphic = "MD")
+dev.off()
+```
+![](/images/T1_T2_MDplot.jpeg)  
+
+
+
 
  
 
