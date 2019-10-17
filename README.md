@@ -10,9 +10,9 @@ Contents
 5. [Determining and Removing Redundent Transcripts](#5-determining-and-removing-redundent-transcripts)
 6. [Creating An Index](#6-creating-an-index)
 7. [Aligning the Reads to the Index and Generating Counts](#7-aligning-the-reads-to-the-index-and-generating-counts)
-8. [Differentially Expressed Genes using Gfold](#8-differentially-expressed-genes-using-gfold)  
-       *    Gfold   
-       *    NOISeq 
+8. [Differentially Expressed Genes using Gfold](#8-differentially-expressed-genes)  
+       *    [Gfold](#a-differentially-expressed-genes-using-gfold)   
+       *    [NOISeq](#b-differentially-expressed-genes-using-noiseq) 
 9. [EnTAP - Functional Annotation for DE Genes](#9-entap---functional-annotation-for-de-genes) 
 
  
@@ -686,7 +686,7 @@ TRINITY_DN17708_c0_g1_i3.p1     TRINITY_DN17708_c0_g1_i3.p1     2.27485 1       
 ```  
 
 
-### a. Differentially Expressed Genes using NOISeq  
+### b. Differentially Expressed Genes using NOISeq  
 
 Another program which is usefull in finding differentially expressed genes when there are no replicates is [NOISeq](https://bioconductor.org/packages/release/bioc/html/NOISeq.html) which is a R backage. It can be use to get explortory plots to evaluate count distribution, types of detected features, and differential expression between two conditions.   
   
@@ -892,24 +892,24 @@ You are working with simulated replicates:
 The next step would be, how to select the differentially expressed features. This can be done using **degenes** function and applying a threshold using the q value. With the argument M, we can choose if we want all the differentially expressed genes (NULL), only the differentially expressed features that are more expressed in condition 1 than in condition 2 (M="up") or only the features which are under expressed in condition 1 with regard to condition 2 (M = "down").  
 
 ```r
-mynoiseq.sim.deg = degenes(mynoiseq.sim, q = 0.8, M = NULL)
+mynoiseq.sim.deg = degenes(mynoiseq.sim, q = 0.9, M = NULL)
 ```  
 ```
-[1] "34854 differentially expressed features"
+[1] "27042 differentially expressed features"
 ```
 
 ```r 
-mynoiseq.sim.deg_up = degenes(mynoiseq.sim, q = 0.8, M = "up")
+mynoiseq.sim.deg_up = degenes(mynoiseq.sim, q = 0.9, M = "up")
 ```  
 ```
-[1] "21868 differentially expressed features (up in first condition)"
+[1] "18218 differentially expressed features (up in first condition)"
 ```  
 
 ```r
-mynoiseq.sim.deg_down = degenes(mynoiseq.sim, q = 0.8, M = "down")
+mynoiseq.sim.deg_down = degenes(mynoiseq.sim, q = 0.9, M = "down")
 ```  
 ```
-[1] "12986 differentially expressed features (down in first condition)"
+[1] "8824 differentially expressed features (down in first condition)"
 ```  
 
 These features can be written into a csv file using the following command.
@@ -920,6 +920,7 @@ write.csv(mynoiseq.sim.deg_down, file = paste0(csv_out, "/", prefix, "_DEgenes_d
 ```   
 
  
+
  
 
 
