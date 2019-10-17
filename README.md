@@ -817,7 +817,7 @@ head(assayData(mydata)$exprs)
 head(pData(mydata))
 ```   
 
-*PCA Plots*  
+####  PCA Plots 
 Principle component analysis plots can be obtained using the package. Before generating anytype of plots, *dat* function must be applied on the input data which is the NOISeq object to obtain the data which is needed. This can be passed using the _type_ argument. Once the data is generated to plot, image can be generated using the _explo.plot_ function.  
 
 PCA component analysis is a technique whcich can be used to visualize if the expreimental samples are clustered according to the experimental design. 
@@ -833,6 +833,31 @@ explo.plot(myPCA, factor= "TimePoint")
 ![](images/PCA_plot.png)  
 
 
+#### NOISeq-sim  
+
+NOISeq method can be used to compute differential expression on data set with technical replicates (NOISeq-real) or with out replicates (NOISeq-sim). NOISeq computes the differential statistics for each feature:  
+    *    M: log2 ratio of the two conditions   
+    *    D: value of the difference between conditions    
+
+A feature is considered differentially expressed if corresponding M and D values are higher than the noise. Therefore by comparing the M and D values of a given feature against the noise distributioin, NOISeq produceses the *probability of differential expression"*  for this feature. In the case of no replicates, NOISeq simulates technical replicates in order to estimate this. Please remember that this is an approximation and will be only showing which genes will be showing a higher change between conditions.   
+
+```r  
+###########################
+## Differential Expression
+###########################
+## T1 vs T2
+mynoiseq.sim <-  noiseq(mydata,
+                        factor = "TimePoint",
+                        k = 0.5,
+                        norm = "rpkm",
+                        pnr = 0.2,
+                        nss = 5,
+                        v = 0.02,
+                        lc = 0,
+                        replicates = "no")
+```  
+
+ 
 
 
 ## 9. EnTAP - Functional Annotation for DE Genes  
