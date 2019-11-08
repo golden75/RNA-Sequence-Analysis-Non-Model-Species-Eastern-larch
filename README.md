@@ -610,7 +610,8 @@ TRINITY_DN21012_c2_g1_i3.p1	10839	10681.3	172	1.05472
 
 
 ## 8. Differentially Expressed Genes 
-  
+
+In this section we will show you two methods of finding the differentially expressed genes namely **Gfold** and **NOISeq**.  
 
 ### a. Differentially Expressed Genes using Gfold   
 
