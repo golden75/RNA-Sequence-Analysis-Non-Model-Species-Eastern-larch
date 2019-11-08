@@ -1031,4 +1031,4 @@ EnTAP/
 ```
 
 
-This is the end
+More information on EnTAP can be found in [EnTAP documentation](https://entap.readthedocs.io/en/latest/introduction.html) which has a very comprihensive discription.
