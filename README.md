@@ -10,9 +10,9 @@ Contents
 5. [Determining and Removing Redundent Transcripts](#5-determining-and-removing-redundent-transcripts)
 6. [Creating An Index](#6-creating-an-index)
 7. [Aligning the Reads to the Index and Generating Counts](#7-aligning-the-reads-to-the-index-and-generating-counts)
-8. [Differentially Expressed Genes using Gfold](#8-differentially-expressed-genes)  
-       *    [Gfold](#a-differentially-expressed-genes-using-gfold)   
-       *    [NOISeq](#b-differentially-expressed-genes-using-noiseq) 
+8. [Diffferential Expression](#8-differentially-expressed-genes)  
+       a.    [Gfold](#a-differentially-expressed-genes-using-gfold)   
+       b.    [NOISeq](#b-differentially-expressed-genes-using-noiseq) 
 9. [EnTAP - Functional Annotation for DE Genes](#9-entap---functional-annotation-for-de-genes) 
 
  
