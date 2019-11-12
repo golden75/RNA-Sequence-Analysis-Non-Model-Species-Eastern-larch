@@ -9,7 +9,7 @@ Contents
 4. [Identifying the Coding Regions](#4-identifying-the-coding-regions)  
 5. [Determining and Removing Redundent Transcripts](#5-determining-and-removing-redundent-transcripts)
 6. [Creating An Index](#6-creating-an-index)
-7. [Aligning the Reads to the Index and Generating Counts](#7-aligning-the-reads-to-the-index-and-generating-counts)
+7. [Extraction of Read Counts using Kallisto](#7-aligning-the-reads-to-the-index-and-generating-counts)
 8. [Diffferential Expression](#8-differentially-expressed-genes)  
        a.    [Gfold](#a-differentially-expressed-genes-using-gfold)   
        b.    [NOISeq](#b-differentially-expressed-genes-using-noiseq) 
@@ -539,9 +539,8 @@ Index/
     
    
     
-## 7. Aligning the Reads to the Index and Generating Counts
-   
-### Aligning the reads using kallisto and generating counts  
+## 7. Extraction of Read Counts using Kallisto
+     
 
 In this step we will be working in **Counts** directory, and will be using the the `kallisto quant` command to run the quantification algorithm. As for this tutorial moving forward we will only going to do a pairwise comparison for tutorials time constrans, so we are only doing to compare time points 2 and 3 using the Killingworth tree here.  
  
