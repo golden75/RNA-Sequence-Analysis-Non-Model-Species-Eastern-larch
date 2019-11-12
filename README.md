@@ -9,7 +9,7 @@ Contents
 4. [Identifying the Coding Regions](#4-identifying-the-coding-regions)  
 5. [Determining and Removing Redundent Transcripts](#5-determining-and-removing-redundent-transcripts)
 6. [Creating An Index](#6-creating-an-index)
-7. [Extraction of Read Counts using Kallisto](#7-aligning-the-reads-to-the-index-and-generating-counts)
+7. [Extraction of Read Counts using Kallisto](#7-extraction-of-read-counts-using-kallisto)
 8. [Diffferential Expression](#8-differentially-expressed-genes)  
        a.    [Gfold](#a-differentially-expressed-genes-using-gfold)   
        b.    [NOISeq](#b-differentially-expressed-genes-using-noiseq) 
