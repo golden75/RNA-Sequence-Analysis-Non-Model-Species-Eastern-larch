@@ -875,9 +875,12 @@ explo.plot(myPCA, factor= "TimePoint")
 
 #### NOISeq-sim  
 
-NOISeq method can be used to compute differential expression on data set with technical replicates (NOISeq-real) or with out replicates (NOISeq-sim). NOISeq computes the differential statistics for each feature:  
-    *    M: log2 ratio of the two conditions   
-    *    D: value of the difference between conditions    
+NOISeq method can be used to compute differential expression on data set with technical replicates (NOISeq-real) or with out replicates (NOISeq-sim). NOISeq computes the differential statistics for each feature:   
+
+*   **M**: log2 ratio of the two conditions  
+*   **D**: value difference between conditions   
+
+ 
 
 A feature is considered differentially expressed if corresponding M and D values are higher than the noise. Therefore by comparing the M and D values of a given feature against the noise distributioin, NOISeq produceses the *probability of differential expression"*  for this feature. In the case of no replicates, NOISeq simulates technical replicates in order to estimate this. Please remember that this is an approximation and will be only showing which genes will be showing a higher change between conditions.   
 
