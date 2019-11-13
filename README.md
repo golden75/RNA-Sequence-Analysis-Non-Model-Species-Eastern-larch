@@ -8,12 +8,13 @@ This repository is a usable, publicly available tutorial for analyzing different
 3. [Assembling the Transcriptome](#3-assembling-the-transcriptome)  
 4. [Identifying the Coding Regions](#4-identifying-the-coding-regions)  
 5. [Determining and Removing Redundent Transcripts](#5-determining-and-removing-redundent-transcripts)
-6. [Creating An Index](#6-creating-an-index)
-7. [Extraction of Read Counts using Kallisto](#7-extraction-of-read-counts-using-kallisto)
-8. [Diffferential Expression](#8-differentially-expressed-genes)  
+6. [Evaluating Assemblies](#6-evaluating-assemblies)
+7. [Creating An Index](#7-creating-an-index)
+8. [Extraction of Read Counts using Kallisto](#8-extraction-of-read-counts-using-kallisto)
+9. [Diffferential Expression](#9-differentially-expressed-genes)  
        a.    [Gfold](#a-differentially-expressed-genes-using-gfold)   
        b.    [NOISeq](#b-differentially-expressed-genes-using-noiseq) 
-9. [EnTAP - Functional Annotation for DE Genes](#9-entap---functional-annotation-for-de-genes) 
+10. [EnTAP - Functional Annotation for DE Genes](#10-entap---functional-annotation-for-de-genes) 
 
  
  
@@ -507,9 +508,48 @@ Clustering/
 
 The _centroids.fasta_ will contain the unique genes from the four assemblies. 
     
+
+## 6. Evaluating Assemblies  
+
+ Once you have assembled the transcripts quality of your assembled transcriptome can be evaluate and benchmarked against a gene database using [rnaQUAST](http://cab.spbu.ru/software/rnaquast/). This will compare the alignments with the gene database and will produce a summary report at the end.
+
+As now we have a assembled transcripts in a centroids file, we will evaluate this using **rnaQuast**. In this step we will be working in the **RNAQuast/** directory.  
+
+```bash
+module load rnaQUAST/1.5.2
+module load GeneMarkS-T/5.1
+
+rnaQUAST.py --transcripts ../Clustering/centroids.fasta \
+	--gene_mark \
+        --threads 8 \
+        --output_dir Genemark
+```
+
+Command options we used in the above are:
+```
+--transcripts <TRANSCRIPTS, ...>        transcripts in FASTA format
+--gene_mark                             Run with GeneMarkS-T gene prediction tool
+--threads <INT>                         Maximum number of threads. Default is min(number of CPUs / 2, 16)
+--output_dir <OUTPUT_DIR>               Directory to store all results
+```
+
+The full slurm script is called rnaQuast.sh and it can be found in the **RNAQuast/** directory.   
+
+The program will produce various statistics and it will produce a short summary report as well as a long report, where you can look and assess the quality of your assembled transcriptome. Shown below are matrics which is produced in *alignment_metrics.txt* file. 
+
+METRICS   |    centroids    
+----  |   ---- 
+Transcripts  |  64275   
+Transcripts > 500 bp   |   28385  
+Transcripts > 1000 bp   |  10593  
+Average length of assembled transcripts  |   663.088  
+Longest transcript   |   13230
+Total length   |    42619973   
+Transcript N50  |    407   
+
+
      
-     
-## 6. Creating An Index   
+## 7. Creating An Index   
 
 ### Creating an index using Kallisto   
 
@@ -539,7 +579,7 @@ Index/
     
    
     
-## 7. Extraction of Read Counts using Kallisto
+## 8. Extraction of Read Counts using Kallisto
      
 
 In this step we will be working in **Counts** directory, and will be using the the `kallisto quant` command to run the quantification algorithm. As for this tutorial moving forward we will only going to do a pairwise comparison for tutorials time constrans, so we are only doing to compare time points 2 and 3 using the Killingworth tree here.  
@@ -608,7 +648,7 @@ TRINITY_DN21012_c2_g1_i3.p1	10839	10681.3	172	1.05472
 ```
 
 
-## 8. Differentially Expressed Genes 
+## 9. Differentially Expressed Genes 
 
 In this section we will show you two methods of finding the differentially expressed genes namely **Gfold** and **NOISeq**.  
 
@@ -950,7 +990,7 @@ dev.off()
  
 
 
-## 9. EnTAP - Functional Annotation for DE Genes  
+## 10. EnTAP - Functional Annotation for DE Genes  
 
 Once the differentially expressed genes have been identified, we need to annotate the genes to identify the function. We will take the top 10 upregulated genes from the gfold output and will do a quick annotation. In order to run the EnTAP program, we need to provide a peptide sequence of the genes which we want to do the functional annotation.   
   
