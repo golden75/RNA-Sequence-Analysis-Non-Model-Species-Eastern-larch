@@ -22,7 +22,7 @@ module load diamond/0.9.19
 module load eggnog-mapper/0.99.1
 module load interproscan/5.25-64.0
 
-/labs/Wegrzyn/EnTAP/EnTAP --runP -i ExtractedSq.fasta -d /isg/shared/databases/Diamond/RefSeq/plant.protein.faa.92.dmnd -d /isg/shared/databases/Diamond/Uniprot/uniprot_sprot.dmnd --ontology 0  --threads 16 
+/labs/Wegrzyn/EnTAP/EnTAP_v0.9.0/EnTAP/EnTAP --runP -i ExtractedSq.fasta -d /isg/shared/databases/Diamond/RefSeq/plant.protein.faa.97.dmnd -d /isg/shared/databases/Diamond/Uniprot/uniprot_sprot.dmnd --ontology 0  --threads 16 
 
 
 
