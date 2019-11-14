@@ -38,6 +38,7 @@ The data consists of 4 libraries under two different time points (roughly one mo
   K23   |  Killingworth   |  3   |  2 
 
   
+### Cloning the workflow 
 In this workflow we have seperated each step into folders, where you can find the appropriate scripts in conjunction with each steps. When you clone the git repository, the below directory structure will be cloned into your working directory.   
 
 So to follow the steps would be esay once you have cloned this git repository using the `clone` command:
@@ -63,7 +64,7 @@ Eastern_larch/
 └── EnTAP
 ```  
    
-   
+###  SLURM scripts   
 The tutorial will be using SLURM schedular to submit jobs to Xanadu cluster. In each script we will be using it will contain a header section which will allocate the resources for the SLURM schedular. The header section will contain:  
 
 ```bash
