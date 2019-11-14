@@ -11,7 +11,7 @@ This repository is a usable, publicly available tutorial for analyzing different
 6. [Evaluating Assemblies](#6-evaluating-assemblies)
 7. [Creating An Index](#7-creating-an-index)
 8. [Extraction of Read Counts using Kallisto](#8-extraction-of-read-counts-using-kallisto)
-9. [Diffferential Expression](#9-differentially-expressed-genes)  
+9. [Diffferential Expression](#9-diffferential-expression)  
        a.    [Gfold](#a-differentially-expressed-genes-using-gfold)   
        b.    [NOISeq](#b-differentially-expressed-genes-using-noiseq) 
 10. [EnTAP - Functional Annotation for DE Genes](#10-entap---functional-annotation-for-de-genes) 
@@ -28,12 +28,15 @@ When an organism is called "model" there is an underlying assumption that very g
 ![ out line ](/images/outline_wide.png)  
 
 The data consists of 4 libraries under two different time points (roughly one month apart). This is representing 3 tree for two populations (U and K).  
-*  U32 : UConn Tree 3, at time point 2  
-*  U13 : UConn Tree 1, at time point 3  
-*  K32 : Killingworth Tree 2, at time point 2   
-*  K23 : Killingworth Tree 2, at time point 3
 
-  
+
+  Sample   |   Location   |   Time point  |   Population number    
+  ----  |   ----   |   ----  |   ----
+  U32   |  UConn  |   2  |   3 
+  U13   |  UConn  |   3  |   1   
+  K32   |  Killingworth   |   2   | 2   
+  K23   |  Killingworth   |  3   |  2 
+
   
 In this workflow we have seperated each step into folders, where you can find the appropriate scripts in conjunction with each steps. When you clone the git repository, the below directory structure will be cloned into your working directory.   
 
@@ -52,9 +55,11 @@ Eastern_larch/
 ├── Assembly
 ├── Coding_Regions
 ├── Clustering
+├── RNAQuast
 ├── Index
 ├── Counts
-├── Gfold
+├── Gfold 
+├── NOISeq
 └── EnTAP
 ```  
    
@@ -648,7 +653,7 @@ TRINITY_DN21012_c2_g1_i3.p1	10839	10681.3	172	1.05472
 ```
 
 
-## 9. Differentially Expressed Genes 
+## 9. Diffferential Expression 
 
 In this section we will show you two methods of finding the differentially expressed genes namely **Gfold** and **NOISeq**.  
 
