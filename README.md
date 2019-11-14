@@ -87,7 +87,7 @@ Before beginning, we need to understand a few aspects of the Xanadu server. When
 
 These data files are only avaliable through Xanadu cluster, as they belong to the Dr. Jill Wegrzyn lab. If you are working in the Xanadu cluster to avoid redundancy in the data files, you can create a simlink to the read files. After creating sim-links you can work your way though the rest of the steps as we have discussed in the tutorial. 
 
-So in the **Raw_Reads** folder we have created a script to creat a sim-links for the actual data, which is called [raw_data_simlinks.sh](/Raw_Reads/raw_data_simlinks.sh), You can run this script using `sbatch` command.  
+So in the **Raw_Reads/** folder we have created a script to creat a sim-links for the actual data, which is called [raw_data_simlinks.sh](/Raw_Reads/raw_data_simlinks.sh), You can run this script using `sbatch` command.  
  
   
 Raw_Reads folder will look like:  
@@ -198,7 +198,7 @@ The quality may be any score from 0 to 40. The default of 20 is much too low for
 
 The full slurm script which is called [sickle.sh](/Quality_Control/sickle.sh) is stored in the Quality_Control folder.  
 
-At the end of the run, each run will produce **3** files, a trimmed forward read file, trimmed reverse read file and a singles file. Singles file will contain the reads which did not have a paired read to start with. The following files will be produced at the end of the run:  
+At the end of the run, each run will produce **3** files, a *trimmed forward read file*, *trimmed reverse read file* and a *singles file*. Singles file will contain the reads which did not have a paired read to start with. The following files will be produced at the end of the run:  
 ```
 Quality_Control/
 ├── trim_U13_R1.fastq
@@ -253,7 +253,7 @@ A C G A C G T [T T G A G A] T T A C C T A G
     
 ### De novo Assembling the Transcriptome using Trinity
 
-In De novo assembly section, we will be woking in the `assembly` directory. In here we will be assembling the trimmed illumina reads seperatly using the trinity transcriptome assembler. Assembly requires a great deal of memory (RAM) and can take few days if the read set is large. Following is the trinity command that we use to assemble each transcriptome seperatly.    
+In De novo assembly section, we will be woking in the **assembly/** directory. In here we will be assembling the trimmed illumina reads seperatly using the trinity transcriptome assembler. Assembly requires a great deal of memory (RAM) and can take few days if the read set is large. Following is the trinity command that we use to assemble each transcriptome seperatly.    
    
 ```bash
 module load trinity/2.6.6
@@ -352,7 +352,7 @@ So we will have three assembly files, one for each condition or time step.
    
 ### Identifying coding regions using TransDecoder   
 
-Now we have our assembled transcriptomes for the each of the libraries. Before looking for the coding regions we will combine all the assemblies together. We will be working in the `Coding_Regions` directory, and for this we will use the UNIX command `cat` as follows:  
+Now we have our assembled transcriptomes for the each of the libraries. Before looking for the coding regions we will combine all the assemblies together. We will be working in the **Coding_Regions/** directory, and for this we will use the UNIX command `cat` as follows:  
 
 ```bash
 cat ../Assembly/trinity_U13.Trinity.fasta \
@@ -478,7 +478,7 @@ Because we used RNA reads to sequence our transcriptome, chances are that there 
 
 To obtain a set of unique genes from both runs, we will cluster the two resulting assemblies together. First, the two assembies will be combined into one file using the Unix command cat, which refers to concatanate.
 
-Since we have selected our reads according to the coding regions in the previous step, we will use vsearch to find redundancy between the assembled transcripts and create a single output known as a centroids file. The threshold for clustering in this example is set to 80% identity. In this step we will be working in the **Clustering** directory:   
+Since we have selected our reads according to the coding regions in the previous step, we will use vsearch to find redundancy between the assembled transcripts and create a single output known as a centroids file. The threshold for clustering in this example is set to 80% identity. In this step we will be working in the **Clustering/** directory:   
  
 ```bash
 module load vsearch/2.4.3
@@ -576,7 +576,7 @@ Required argument:
 
 ```  
     
-The full slurm script is called [kallisto_index.sh](/Index/kallisto_index.sh) can be found in the **Index** folder. This will create a kallisto index of the *centroids.fasta* FASTA file, where it will create the following file:   
+The full slurm script is called [kallisto_index.sh](/Index/kallisto_index.sh) can be found in the **Index/** folder. This will create a kallisto index of the *centroids.fasta* FASTA file, where it will create the following file:   
 ```
 Index/
 └── Eastern_larch_index
@@ -587,7 +587,7 @@ Index/
 ## 8. Extraction of Read Counts using Kallisto
      
 
-In this step we will be working in **Counts** directory, and will be using the the `kallisto quant` command to run the quantification algorithm. As for this tutorial moving forward we will only going to do a pairwise comparison for tutorials time constrans, so we are only doing to compare time points 2 and 3 using the Killingworth tree here.  
+In this step we will be working in **Counts/** directory, and will be using the the `kallisto quant` command to run the quantification algorithm. As for this tutorial moving forward we will only going to do a pairwise comparison for tutorials time constrans, so we are only doing to compare time points 2 and 3 using the Killingworth tree here.  
  
 
 ```bash
@@ -618,7 +618,7 @@ Optional arguments:
 ```   
    
     
-**kallisto** can process either paired-end or single-end reads. The default running mode is paired-end reads and need a even number of FASTQ files, for represent the pairs as shown in above example. When running single end reads please check the [kallisto manual](https://pachterlab.github.io/kallisto/manual) for correct parameters. The complete slurm script is called [kallisto_counts.sh](/Counts/kallisto_counts.sh) which is stored in the **Counts** directory.  
+**kallisto** can process either paired-end or single-end reads. The default running mode is paired-end reads and need a even number of FASTQ files, for represent the pairs as shown in above example. When running single end reads please check the [kallisto manual](https://pachterlab.github.io/kallisto/manual) for correct parameters. The complete slurm script is called [kallisto_counts.sh](/Counts/kallisto_counts.sh) which is stored in the **Counts/** directory.  
   
 
 By running the quantification algorithum it will produce three output files: 
@@ -712,7 +712,7 @@ gfold diff [options]
 -suf	 input files extention
 ```
    
-The complete slurm script is called [gfold.sh](/Gfold/gfold.sh) which is stored in the **Gfold** directory. By running the Gfold program it will generate the following files, which contains the fold change value between the two conditions.
+The complete slurm script is called [gfold.sh](/Gfold/gfold.sh) which is stored in the **Gfold/** directory. By running the Gfold program it will generate the following files, which contains the fold change value between the two conditions.
 ```
 Gfold/
 ├── K32_vs_K23.diff
