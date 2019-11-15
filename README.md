@@ -1036,45 +1036,39 @@ Optional:
 The full script for slurm scheduler is called [entap.sh](/EnTAP/entap.sh) can be found in the EnTAP directory. Once the job is done it will create a folder called “outfiles” which will contain the output of the program.   
 ```
 EnTAP/
-└── outfiles/
-    ├── entap_out
-    │   ├── ExtractedSq.fasta
-    │   └── ExtractedSq_final.fasta
-    ├── final_annotated.faa
-    ├── final_annotated.fnn
-    ├── final_annotations_lvl0_contam.tsv
-    ├── final_annotations_lvl0_no_contam.tsv
-    ├── final_annotations_lvl0.tsv
-    ├── final_annotations_lvl3_contam.tsv
-    ├── final_annotations_lvl3_no_contam.tsv
-    ├── final_annotations_lvl3.tsv
-    ├── final_annotations_lvl4_contam.tsv
-    ├── final_annotations_lvl4_no_contam.tsv
-    ├── final_annotations_lvl4.tsv
-    ├── final_unannotated.faa
-    ├── log_file_2019.5.7-22h33m34s.txt
-    ├── ontology
-    │   └── EggNOG
-    │       ├── annotation_results.emapper.annotations
-    │       ├── annotation_results.emapper.seed_orthologs
-    │       ├── annotation_results_no_hits.emapper.annotations
-    │       ├── annotation_results_no_hits.emapper.seed_orthologs
-    │       ├── annotation_std.err
-    │       ├── annotation_std.out
-    │       └── processed
-    │           ├── annotated_sequences.faa
-    │           ├── annotated_sequences.fnn
-    │           ├── unannotated_sequences.faa
-    │           └── unannotated_sequences.fnn
-    └── similarity_search
-        ├── blastp_ExtractedSq_final_plant.protein.faa.92.out
-        ├── blastp_ExtractedSq_final_plant.protein.faa.92_std.err
-        ├── blastp_ExtractedSq_final_plant.protein.faa.92_std.out
-        ├── blastp_ExtractedSq_final_uniprot_sprot.out
-        ├── blastp_ExtractedSq_final_uniprot_sprot_std.err
-        ├── blastp_ExtractedSq_final_uniprot_sprot_std.out
-        ├── overall_results
-        └── processed/
+├── entap_config.txt
+├── entap_outfiles/
+│   ├── debug_2019Y11M15D-14h33m38s.txt
+│   ├── log_file_2019Y11M15D-14h33m38s.txt
+│   ├── final_results/
+|   │   ├── final_annotated.faa
+│   │   ├── final_annotated.fnn
+│   │   ├── final_annotations_contam_lvl0.faa
+│   │   ├── final_annotations_contam_lvl0.fnn
+│   │   ├── final_annotations_contam_lvl0.tsv
+│   │   ├── final_annotations_contam_lvl3.tsv
+│   │   ├── final_annotations_contam_lvl4.tsv
+│   │   ├── final_annotations_lvl0.faa
+│   │   ├── final_annotations_lvl0.fnn
+│   │   ├── final_annotations_lvl0.tsv
+│   │   ├── final_annotations_lvl3.tsv
+│   │   ├── final_annotations_lvl4.tsv
+│   │   ├── final_annotations_no_contam_lvl0.faa
+│   │   ├── final_annotations_no_contam_lvl0.fnn
+│   │   ├── final_annotations_no_contam_lvl0.tsv
+│   │   ├── final_annotations_no_contam_lvl3.tsv
+│   │   ├── final_annotations_no_contam_lvl4.tsv
+│   │   ├── final_unannotated.faa
+│   │   └── final_unannotated.fnn
+│   ├── ontology/
+│   │   └── EggNOG_DMND/
+│   ├── similarity_search/
+│   │   └── DIAMOND
+│   └── transcriptomes/
+├── entap.sh
+├── ExtractedSq.fasta
+├── ExtractSequence.py
+└── Extract_sequence.sh
 ```
 
 
