@@ -1010,8 +1010,21 @@ python ExtractSequence.py ../Gfold/K32_vs_K23.diff ../Coding_Regions/trinity_com
 ``` 
 
 The slurm script is called [Extract_sequence.sh](/EnTAP/Extract_sequence.sh) can be found in the **EnTAP** directory. This will create a FASTA file called *ExtractedSq.fasta* which contains the peptide sequences of the top 10 up regulated genes. 
+```
+EnTAP/
+├── ExtractedSq.fasta
+├── ExtractSequence.py
+└── Extract_sequence.sh
+```
 
-Once we have the fasta file with the protein sequences we can run the enTAP program to grab the functional annotations using the following command. Inorder to run EnTAP you need to have a configuration file set up in your working directory, where it points to the program paths. We have prepared set up a *entap_config.txt* file for you and it can be found in the **EnTAP/** directory.    
+Inorder to run EnTAP you need to have a configuration file set up in your working directory, where it points to the program paths. We have prepared set up a *entap_config.txt* file for you and it can be found in the **EnTAP/** directory.
+
+```
+EnTAP/
+├── entap_config.txt
+```
+
+Once we have the fasta file with the protein sequences, and the config file setup, we can run the enTAP program to grab the functional annotations using the following command.     
 ```bash
 module load EnTAP/0.9.0-beta
 module load diamond/0.9.19
