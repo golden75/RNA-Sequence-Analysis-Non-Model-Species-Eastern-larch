@@ -774,9 +774,9 @@ library(dplyr)
 list.files()
 
 #Set directory paths to working directory
-count_dir <- getwd()
-csv_out <- getwd()
-image_out <- getwd()
+count_dir <- getwd() # or appropriate path to the counts 
+csv_out <- getwd() # or appropriate path to your output csv files
+image_out <- getwd() # or appropriate path to your image out files
 ```   
 
 Next we will create a dataframe to hold the count files by reading one at a time.  
