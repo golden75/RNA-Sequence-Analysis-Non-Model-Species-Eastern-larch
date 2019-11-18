@@ -760,9 +760,14 @@ NOISeq/
   
 ### NOISeq to produce differnetially expressed genes   
 
-This part can be run using the cluster or using your own PC or laptop. We do recommend transfering the above counts files to your own computer and run using RStudio package.  
+This part can be run using the cluster or using your own PC or laptop. We do recommend transfering the above counts files to your own computer and run using RStudio package.
 
-*Prerequiests* Before using the NOISeq package you need to make sure you have already downloaded the required packages including NOISeq and dplyr packages. If not please download the necessary packages which is compatible with your version of R included in the RStudio/R.  
+To transfer the count files from cluster to your location using a terminal window: 
+```bash
+scp <user name>@transfer.cam.uchc.edu:<PATH-to-NOISeq-Directory>/Eastern_larch/NOISeq/*.counts .
+```
+
+**Prerequiests:** Before using the NOISeq package you need to make sure you have already downloaded the required packages including NOISeq and dplyr packages. If not please download the necessary packages which is compatible with your version of R included in the RStudio/R.  
 
 When running the R code discribed below will assume you have downloaded the count files to your R working directory.   
 
