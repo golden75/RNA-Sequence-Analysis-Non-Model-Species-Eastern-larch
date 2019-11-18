@@ -1023,7 +1023,7 @@ EnTAP/
 └── Extract_sequence.sh
 ```
 
-Inorder to run EnTAP you need to have a configuration file set up in your working directory, where it points to the program paths. We have prepared set up a *entap_config.txt* file for you and it can be found in the **EnTAP/** directory.
+Inorder to run EnTAP you need to have a configuration file set up in your working directory, where it points to the program paths. We have prepared a *entap_config.txt* file for you and it can be found in the **EnTAP/** directory.
 
 ```
 EnTAP/
