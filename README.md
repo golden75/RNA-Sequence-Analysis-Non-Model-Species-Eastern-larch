@@ -1091,4 +1091,4 @@ EnTAP/
 ```
 
 
-More information on EnTAP can be found in [EnTAP documentation](https://entap.readthedocs.io/en/latest/introduction.html) which has a very comprihensive discription.
+More information on EnTAP can be found in [EnTAP documentation](https://entap.readthedocs.io/en/v0.9.0-beta/index.html), which has a very comprihensive discription.
