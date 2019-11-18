@@ -1010,7 +1010,8 @@ Once the differentially expressed genes have been identified, we need to annotat
   
 Using the python program called [ExtractSequence.py](/EnTAP/ExtractSequence.py) we will be extracting the top upregulated genes according to the Gfold output file (K32_vs_K23.diff). 
 
-```python
+```python 
+module load python/2.7.14
 python ExtractSequence.py ../Gfold/K32_vs_K23.diff ../Coding_Regions/trinity_combine.fasta.transdecoder.pep 10
 ``` 
 

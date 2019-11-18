@@ -16,6 +16,8 @@ date
 ##########################################
 ## Extract Sequences			## 
 ##########################################
+module load python/2.7.14
+
 python ExtractSequence.py ../Gfold/K32_vs_K23.diff ../Coding_Regions/trinity_combine.fasta.transdecoder.pep 10
 
 
